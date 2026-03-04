@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation — VoIP Server</title>
+  <meta name="description" content="Step-by-step guide to set up and run your own VoIP Server instance.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb"></div><div class="orb"></div><div class="orb"></div>
+  </div>
+
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="navbar-brand">
+        <img src="assets/favicon.svg" alt="">VoIP Server
+      </a>
+      <button class="hamburger" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="navbar-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="features.html">Features</a></li>
+        <li><a href="docs.html" class="active">Docs</a></li>
+        <li><a href="downloads.html">Downloads</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <h1>Documentation</h1>
+        <p class="text-secondary">Get your server up and running in minutes.</p>
+      </div>
+    </section>
+
+    <section class="docs-section">
+      <div class="container">
+        <div class="docs-layout">
+          <aside class="docs-sidebar">
+            <nav class="docs-nav glass-card">
+              <h4>On This Page</h4>
+              <ul>
+                <li><a href="#prerequisites">Prerequisites</a></li>
+                <li><a href="#clone-install">Clone &amp; Install</a></li>
+                <li><a href="#environment">Environment Config</a></li>
+                <li><a href="#running">Running the Server</a></li>
+                <li><a href="#accessing">Accessing the App</a></li>
+              </ul>
+            </nav>
+          </aside>
+
+          <div class="docs-content">
+            <div id="prerequisites" class="docs-block reveal">
+              <h2>Prerequisites</h2>
+              <ul>
+                <li><strong>Node.js</strong> — version 18 or later (<a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a>)</li>
+                <li><strong>npm</strong> — comes with Node.js</li>
+              </ul>
+            </div>
+
+            <div id="clone-install" class="docs-block reveal">
+              <h2>Clone &amp; Install</h2>
+              <p>Clone the repository and install dependencies for both the server and client:</p>
+              <pre><code>git clone https://github.com/sellserv/voice-server.git
+cd voice-server
+
+# Install server dependencies
+cd server
+npm install
+
+# Install client dependencies
+cd ../client
+npm install</code></pre>
+            </div>
+
+            <div id="environment" class="docs-block reveal">
+              <h2>Environment Configuration</h2>
+              <p>Create a <code>.env</code> file in the <code>server/</code> directory:</p>
+              <pre><code># server/.env
+PORT=3000
+JWT_SECRET=your-secret-key-here
+ANNOUNCED_IP=your-server-ip</code></pre>
+              <p class="text-secondary" style="margin-top: 12px;">Replace <code>your-secret-key-here</code> with a strong random string and <code>your-server-ip</code> with your machine's LAN or public IP address.</p>
+            </div>
+
+            <div id="running" class="docs-block reveal">
+              <h2>Running the Server</h2>
+              <h3>Development</h3>
+              <p>Start both the server and client in development mode:</p>
+              <pre><code># Terminal 1 — Server
+cd server
+npm run dev
+
+# Terminal 2 — Client
+cd client
+npm run dev</code></pre>
+              <h3>Production</h3>
+              <p>Build and run for production:</p>
+              <pre><code># Build the client
+cd client
+npm run build
+
+# Start the server (serves built client)
+cd ../server
+npm start</code></pre>
+            </div>
+
+            <div id="accessing" class="docs-block reveal">
+              <h2>Accessing the App</h2>
+              <p>Once running, open your browser and navigate to:</p>
+              <pre><code>http://localhost:3000</code></pre>
+              <p class="text-secondary" style="margin-top: 12px;">The first user to register will automatically be assigned the admin role.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <span>&copy; 2026 VoIP Server</span>
+        <a href="https://github.com/sellserv/voice-server" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

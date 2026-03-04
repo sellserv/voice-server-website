@@ -584,3 +584,38 @@ code {
     position: static;
   }
 }
+
+/* ===== Downloads ===== */
+.downloads-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.download-card {
+  text-align: center;
+}
+
+.download-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.download-card h3 {
+  margin-bottom: 8px;
+}
+
+.download-card p {
+  margin-bottom: 20px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: rgba(124, 92, 252, 0.15);
+  color: var(--accent);
+  border: 1px solid rgba(124, 92, 252, 0.3);
+}

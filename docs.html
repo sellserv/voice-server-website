@@ -46,10 +46,14 @@
               <h4>On This Page</h4>
               <ul>
                 <li><a href="#prerequisites">Prerequisites</a></li>
-                <li><a href="#clone-install">Clone &amp; Install</a></li>
+                <li><a href="#quick-start">Quick Start (Dev)</a></li>
+                <li><a href="#setup-script">Setup Script (Production)</a></li>
                 <li><a href="#environment">Environment Config</a></li>
-                <li><a href="#running">Running the Server</a></li>
-                <li><a href="#accessing">Accessing the App</a></li>
+                <li><a href="#first-account">First Account Setup</a></li>
+                <li><a href="#email-setup">Email Setup (Resend)</a></li>
+                <li><a href="#cloudflare">Cloudflare Setup</a></li>
+                <li><a href="#auto-deploy">Auto-Deploy (GitHub Actions)</a></li>
+                <li><a href="#giphy">GIPHY API</a></li>
               </ul>
             </nav>
           </aside>
@@ -58,63 +62,178 @@
             <div id="prerequisites" class="docs-block reveal">
               <h2>Prerequisites</h2>
               <ul>
-                <li><strong>Node.js</strong> — version 18 or later (<a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a>)</li>
+                <li><strong>Node.js 22</strong> or later (<a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a>)</li>
                 <li><strong>npm</strong> — comes with Node.js</li>
+                <li><strong>Ubuntu 24.04 LTS</strong> or Debian 12+ recommended for production</li>
               </ul>
             </div>
 
-            <div id="clone-install" class="docs-block reveal">
-              <h2>Clone &amp; Install</h2>
-              <p>Clone the repository and install dependencies for both the server and client:</p>
+            <div id="quick-start" class="docs-block reveal">
+              <h2>Quick Start (Development)</h2>
+              <p>Clone the repository and get started locally:</p>
               <pre><code>git clone https://github.com/sellserv/voice-server.git
 cd voice-server
 
-# Install server dependencies
-cd server
+# Install dependencies
 npm install
 
-# Install client dependencies
-cd ../client
-npm install</code></pre>
+# Copy and configure environment
+cp .env.example .env
+
+# Generate a secure JWT secret
+sed -i "0,/change-me-to-a-random-string/s/change-me-to-a-random-string/$(openssl rand -hex 32)/" .env
+
+# Run dev mode (server + client with hot reload)
+npm run dev</code></pre>
+              <p class="text-secondary" style="margin-top: 12px;">In dev mode without <code>SETUP_TOKEN</code> set, the first user gets admin freely. Open <code>http://localhost:3000</code> to access the app.</p>
+            </div>
+
+            <div id="setup-script" class="docs-block reveal">
+              <h2>Setup Script (Production)</h2>
+              <p>The setup script (<code>deploy/setup.sh</code>) configures a fresh server with everything you need:</p>
+              <ul>
+                <li>System updates + 1GB swap + automatic security updates</li>
+                <li>Node.js 22 via NodeSource</li>
+                <li>Build tools for native module compilation</li>
+                <li>nginx as a reverse proxy with Cloudflare IP allowlist, security headers, TLS hardening, and rate limiting</li>
+                <li>UFW firewall (SSH, HTTP, HTTPS, WebRTC UDP ports)</li>
+                <li>SSH hardening (password auth disabled, root login restricted to key-only)</li>
+                <li>fail2ban for brute-force protection</li>
+                <li>Dedicated <code>voip-server</code> system user</li>
+                <li><code>.env</code> with auto-generated JWT secret and setup token</li>
+                <li>SSL certificate directory with restricted permissions</li>
+                <li>systemd service with full sandboxing (syscall filters, capability restrictions, resource limits)</li>
+              </ul>
+              <h3>Running the Script</h3>
+              <pre><code># Clone to your server
+git clone https://github.com/sellserv/voice-server.git /opt/voip-server
+cd /opt/voip-server
+
+# IMPORTANT: Edit DOMAIN at the top of the script first
+nano deploy/setup.sh
+
+# Run the setup script
+sudo bash deploy/setup.sh
+
+# Edit your config
+nano .env
+# Set MEDIASOUP_ANNOUNCED_IP to your server's public IP
+# Set CORS_ORIGINS to https://your-domain.com
+
+# Install, build, and start
+npm ci --omit=dev
+npm run build
+sudo systemctl start voip-server</code></pre>
             </div>
 
             <div id="environment" class="docs-block reveal">
               <h2>Environment Configuration</h2>
-              <p>Create a <code>.env</code> file in the <code>server/</code> directory:</p>
-              <pre><code># server/.env
-PORT=3000
-JWT_SECRET=your-secret-key-here
-ANNOUNCED_IP=your-server-ip</code></pre>
-              <p class="text-secondary" style="margin-top: 12px;">Replace <code>your-secret-key-here</code> with a strong random string and <code>your-server-ip</code> with your machine's LAN or public IP address.</p>
+              <p>After running the setup script, your <code>.env</code> file is at <code>/opt/voip-server/.env</code>. The script auto-generates a JWT secret and setup token. You still need to configure:</p>
+              <h3>Required</h3>
+              <pre><code># Set to your server's public IP — required for WebRTC voice
+MEDIASOUP_ANNOUNCED_IP=203.0.113.50
+
+# Set to your domain
+CORS_ORIGINS=https://your-domain.com</code></pre>
+              <h3>Recommended</h3>
+              <pre><code># Email (required for login — MFA codes are sent via email)
+RESEND_API_KEY=re_xxxxxxxxxxxx
+EMAIL_FROM=noreply@your-domain.com
+
+# GIF picker
+GIPHY_API_KEY=your-giphy-api-key</code></pre>
+              <p class="text-secondary" style="margin-top: 12px;">After editing, restart the service: <code>sudo systemctl restart voip-server</code></p>
             </div>
 
-            <div id="running" class="docs-block reveal">
-              <h2>Running the Server</h2>
-              <h3>Development</h3>
-              <p>Start both the server and client in development mode:</p>
-              <pre><code># Terminal 1 — Server
-cd server
-npm run dev
-
-# Terminal 2 — Client
-cd client
-npm run dev</code></pre>
-              <h3>Production</h3>
-              <p>Build and run for production:</p>
-              <pre><code># Build the client
-cd client
-npm run build
-
-# Start the server (serves built client)
-cd ../server
-npm start</code></pre>
+            <div id="first-account" class="docs-block reveal">
+              <h2>First Account (Admin) Setup</h2>
+              <p>The first user to register becomes the server admin. To prevent unauthorized admin claims, the server requires a <strong>setup token</strong> for the first registration.</p>
+              <ol>
+                <li>The setup script auto-generates a <code>SETUP_TOKEN</code> and prints it to the console — <strong>copy it</strong>.</li>
+                <li>Open your server in a browser and click <strong>Register</strong>.</li>
+                <li>The registration form will show a <strong>Setup Token</strong> field.</li>
+                <li>Paste the token, fill in your details, and register — you're now the admin.</li>
+                <li>After the first account is created, subsequent registrations require an invite code instead.</li>
+              </ol>
+              <p class="text-secondary" style="margin-top: 12px;">You can find or change the setup token in your <code>.env</code> file: <code>SETUP_TOKEN=your-generated-token-here</code></p>
             </div>
 
-            <div id="accessing" class="docs-block reveal">
-              <h2>Accessing the App</h2>
-              <p>Once running, open your browser and navigate to:</p>
-              <pre><code>http://localhost:3000</code></pre>
-              <p class="text-secondary" style="margin-top: 12px;">The first user to register will automatically be assigned the admin role.</p>
+            <div id="email-setup" class="docs-block reveal">
+              <h2>Email Setup (Resend)</h2>
+              <p>Email is <strong>required in production</strong> for MFA login codes, email verification, password resets, and account lockout notifications. Without it, the server will refuse to start in production mode.</p>
+              <ol>
+                <li>Create an account at <a href="https://resend.com" target="_blank" rel="noopener">resend.com</a></li>
+                <li>Add and verify your domain under <strong>Domains</strong> (requires adding DNS records)</li>
+                <li>Create an API key under <strong>API Keys</strong></li>
+                <li>Add to your <code>.env</code>:
+                  <pre><code>RESEND_API_KEY=re_xxxxxxxxxxxx
+EMAIL_FROM=noreply@your-domain.com</code></pre>
+                </li>
+              </ol>
+              <p class="text-secondary" style="margin-top: 12px;">The <code>EMAIL_FROM</code> address must use the domain you verified in Resend.</p>
+              <h3>Emails Sent by the Server</h3>
+              <table class="docs-table">
+                <thead><tr><th>Email</th><th>When</th><th>Code Expiry</th></tr></thead>
+                <tbody>
+                  <tr><td>Email verification</td><td>On registration and email change</td><td>10 minutes</td></tr>
+                  <tr><td>MFA login code</td><td>On every login (if using email MFA)</td><td>5 minutes</td></tr>
+                  <tr><td>Password reset code</td><td>On forgot password request</td><td>5 minutes</td></tr>
+                  <tr><td>Account locked</td><td>After 5 failed login attempts</td><td>10 minutes</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div id="cloudflare" class="docs-block reveal">
+              <h2>Cloudflare Setup</h2>
+              <ol>
+                <li>Point your domain to your server's IP with <strong>Proxy ON</strong> (orange cloud)</li>
+                <li>Go to <strong>SSL/TLS &gt; Origin Server</strong> and create an Origin Certificate for your domain</li>
+                <li>Save the certificate to <code>/etc/ssl/voip-server/origin.pem</code></li>
+                <li>Save the private key to <code>/etc/ssl/voip-server/origin-key.pem</code></li>
+                <li>Set SSL/TLS mode to <strong>Full (strict)</strong></li>
+              </ol>
+            </div>
+
+            <div id="auto-deploy" class="docs-block reveal">
+              <h2>Auto-Deploy (GitHub Actions)</h2>
+              <p>Pushes to <code>main</code> automatically deploy to your server via GitHub Actions. The workflow pulls latest code, installs dependencies, builds the client, restarts the service, and runs a health check.</p>
+              <h3>Setup</h3>
+              <ol>
+                <li>Create a deploy user on your server:
+                  <pre><code>sudo useradd -m -s /bin/bash deploy
+sudo usermod -aG voip-server deploy
+echo 'deploy ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart voip-server' \
+  | sudo tee /etc/sudoers.d/voip-server-deploy</code></pre>
+                </li>
+                <li>Generate an SSH key pair and copy the public key to your server:
+                  <pre><code>ssh-keygen -t ed25519 -f ~/.ssh/voip-server-deploy -N ""
+ssh-copy-id -i ~/.ssh/voip-server-deploy.pub deploy@your-server-ip</code></pre>
+                </li>
+                <li>Add these <strong>repository secrets</strong> in GitHub (Settings &gt; Secrets &gt; Actions):
+                  <table class="docs-table">
+                    <thead><tr><th>Secret</th><th>Value</th></tr></thead>
+                    <tbody>
+                      <tr><td><code>DEPLOY_HOST</code></td><td>Your server's IP address</td></tr>
+                      <tr><td><code>DEPLOY_USER</code></td><td><code>deploy</code></td></tr>
+                      <tr><td><code>DEPLOY_SSH_KEY</code></td><td>Contents of the private key file</td></tr>
+                    </tbody>
+                  </table>
+                </li>
+                <li>Ensure the repo is cloned at <code>/opt/voip-server</code> and the deploy user has read access.</li>
+              </ol>
+            </div>
+
+            <div id="giphy" class="docs-block reveal">
+              <h2>GIPHY API</h2>
+              <p>The GIF picker and GIF banner selection require a GIPHY API key.</p>
+              <ol>
+                <li>Go to <a href="https://developers.giphy.com" target="_blank" rel="noopener">developers.giphy.com</a> and create an app</li>
+                <li>Copy the API key</li>
+                <li>Add to your <code>.env</code>:
+                  <pre><code>GIPHY_API_KEY=your-api-key-here</code></pre>
+                </li>
+                <li>Restart the service: <code>sudo systemctl restart voip-server</code></li>
+              </ol>
             </div>
           </div>
         </div>

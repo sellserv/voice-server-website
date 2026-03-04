@@ -551,6 +551,45 @@ main {
   color: var(--text-secondary);
 }
 
+.docs-block ol {
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+
+.docs-block ol li {
+  margin-bottom: 12px;
+}
+
+.docs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 0.9rem;
+}
+
+.docs-table th,
+.docs-table td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-card);
+}
+
+.docs-table th {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.docs-table td {
+  color: var(--text-secondary);
+}
+
+.docs-table tr:last-child td {
+  border-bottom: none;
+}
+
 /* ===== Code Blocks ===== */
 pre {
   background: rgba(0, 0, 0, 0.4);

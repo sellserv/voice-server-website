@@ -62,10 +62,7 @@
             <div class="download-icon">🍎</div>
             <h3>macOS</h3>
             <p class="text-secondary">macOS 12 Monterey or later</p>
-            <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
-              <a href="#" id="download-mac-arm" class="btn btn-primary">Apple Silicon .dmg</a>
-              <a href="#" id="download-mac-intel" class="btn btn-secondary">Intel .dmg</a>
-            </div>
+            <a href="#" id="download-mac-arm" class="btn btn-primary">Download .dmg</a>
           </div>
         </div>
 
@@ -107,7 +104,6 @@
         setLink('download-linux-deb', asset('amd64.deb'));
         setLink('download-linux-pacman', asset('x86_64.pkg.tar.zst'));
         setLink('download-linux-appimage', asset('amd64.AppImage'));
-        setLink('download-mac-intel', asset('x64.dmg'));
         setLink('download-mac-arm', asset('aarch64.dmg'));
       })
       .catch(() => {

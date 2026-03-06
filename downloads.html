@@ -40,24 +40,31 @@
 
     <section class="downloads-section">
       <div class="container">
+        <p class="text-secondary" id="latest-version" style="text-align:center; margin-bottom: 24px;"></p>
         <div class="downloads-grid">
           <div class="glass-card download-card reveal">
             <div class="download-icon">🪟</div>
             <h3>Windows</h3>
             <p class="text-secondary">Windows 10 or later (64-bit)</p>
-            <span class="badge">Coming Soon</span>
+            <a href="#" id="download-windows" class="btn btn-primary">Download .exe</a>
           </div>
           <div class="glass-card download-card reveal">
             <div class="download-icon">🐧</div>
             <h3>Linux</h3>
             <p class="text-secondary">Ubuntu, Debian, Fedora, Arch (64-bit)</p>
-            <span class="badge">Coming Soon</span>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
+              <a href="#" id="download-linux-deb" class="btn btn-primary">Download .deb</a>
+              <a href="#" id="download-linux-appimage" class="btn btn-secondary">Download .AppImage</a>
+            </div>
           </div>
           <div class="glass-card download-card reveal">
             <div class="download-icon">🍎</div>
             <h3>macOS</h3>
             <p class="text-secondary">macOS 12 Monterey or later</p>
-            <span class="badge">Coming Soon</span>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
+              <a href="#" id="download-mac-intel" class="btn btn-primary">Intel .dmg</a>
+              <a href="#" id="download-mac-arm" class="btn btn-secondary">Apple Silicon .dmg</a>
+            </div>
           </div>
         </div>
 
@@ -80,5 +87,30 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script>
+    fetch('https://api.github.com/repos/sellserv/voice-server/releases/latest')
+      .then(r => r.json())
+      .then(release => {
+        const v = release.tag_name;
+        const ver = v.replace(/^v/, '');
+        document.getElementById('latest-version').textContent = 'Latest version: ' + v;
+
+        const asset = name => release.assets.find(a => a.name.includes(name));
+
+        const setLink = (id, a) => {
+          const el = document.getElementById(id);
+          if (el && a) el.href = a.browser_download_url;
+        };
+
+        setLink('download-windows', asset('x64-setup.exe'));
+        setLink('download-linux-deb', asset('amd64.deb'));
+        setLink('download-linux-appimage', asset('amd64.AppImage'));
+        setLink('download-mac-intel', asset('x64.dmg'));
+        setLink('download-mac-arm', asset('aarch64.dmg'));
+      })
+      .catch(() => {
+        document.getElementById('latest-version').textContent = 'Could not fetch latest version.';
+      });
+  </script>
 </body>
 </html>

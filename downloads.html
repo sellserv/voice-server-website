@@ -54,6 +54,7 @@
             <p class="text-secondary">Ubuntu, Debian, Fedora, Arch (64-bit)</p>
             <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
               <a href="#" id="download-linux-deb" class="btn btn-primary">Download .deb</a>
+              <a href="#" id="download-linux-pacman" class="btn btn-secondary">Download .pacman</a>
               <a href="#" id="download-linux-appimage" class="btn btn-secondary">Download .AppImage</a>
             </div>
           </div>
@@ -104,6 +105,7 @@
 
         setLink('download-windows', asset('x64-setup.exe'));
         setLink('download-linux-deb', asset('amd64.deb'));
+        setLink('download-linux-pacman', asset('x86_64.pkg.tar.zst'));
         setLink('download-linux-appimage', asset('amd64.AppImage'));
         setLink('download-mac-intel', asset('x64.dmg'));
         setLink('download-mac-arm', asset('aarch64.dmg'));

@@ -121,18 +121,18 @@
         const ver = v.replace(/^v/, '');
         document.getElementById('latest-version').textContent = 'Latest version: ' + v;
 
-        const asset = name => release.assets.find(a => a.name.includes(name));
+        const asset = ext => release.assets.find(a => a.name.endsWith(ext));
 
         const setLink = (id, a) => {
           const el = document.getElementById(id);
           if (el && a) el.href = a.browser_download_url;
         };
 
-        setLink('download-windows', asset('x64-setup.exe'));
-        setLink('download-linux-deb', asset('amd64.deb'));
-        setLink('download-linux-pacman', asset('x86_64.pkg.tar.zst'));
-        setLink('download-linux-appimage', asset('amd64.AppImage'));
-        setLink('download-mac-arm', asset('aarch64.dmg'));
+        setLink('download-windows', asset('.exe'));
+        setLink('download-linux-deb', asset('.deb'));
+        setLink('download-linux-pacman', asset('.pacman'));
+        setLink('download-linux-appimage', asset('.AppImage'));
+        setLink('download-mac-arm', asset('.dmg'));
       })
       .catch(() => {
         document.getElementById('latest-version').textContent = 'Could not fetch latest version.';

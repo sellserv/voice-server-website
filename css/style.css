@@ -161,7 +161,7 @@ h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); }
 h3 { font-size: clamp(1.1rem, 2vw, 1.4rem); }
 
 .text-secondary {
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 .container {
@@ -221,7 +221,7 @@ section {
 }
 
 .navbar-links a {
-  color: var(--text-secondary);
+  color: var(--text-muted);
   font-size: 0.95rem;
   transition: color 0.2s;
   position: relative;
@@ -334,17 +334,17 @@ section {
 
 /* ===== Footer ===== */
 .footer {
-  border-top: 1px solid var(--border-card);
+  border-top: 1px solid var(--glass-border);
   padding: 32px 0;
   text-align: center;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   font-size: 0.9rem;
   position: relative;
   z-index: 1;
 }
 
 .footer a {
-  color: var(--text-secondary);
+  color: var(--text-muted);
   transition: color 0.2s;
 }
 
@@ -458,7 +458,7 @@ main {
 
 .hero-subtitle {
   font-size: clamp(1rem, 2vw, 1.25rem);
-  color: var(--text-secondary);
+  color: var(--text-muted);
   margin-bottom: 40px;
   line-height: 1.7;
 }
@@ -515,6 +515,7 @@ main {
 .page-header p {
   margin-top: 12px;
   font-size: 1.15rem;
+  color: var(--text-muted);
 }
 
 /* ===== Features Grid ===== */
@@ -556,7 +557,7 @@ main {
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 .docs-nav ul {
@@ -568,7 +569,7 @@ main {
 }
 
 .docs-nav a {
-  color: var(--text-secondary);
+  color: var(--text-muted);
   font-size: 0.9rem;
   transition: color 0.2s;
 }
@@ -585,7 +586,7 @@ main {
 .docs-block h2 {
   margin-bottom: 16px;
   padding-bottom: 8px;
-  border-bottom: 1px solid var(--border-card);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .docs-block h3 {
@@ -594,7 +595,7 @@ main {
 
 .docs-block p {
   margin-bottom: 16px;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   line-height: 1.7;
 }
 
@@ -605,7 +606,7 @@ main {
 
 .docs-block li {
   margin-bottom: 8px;
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 .docs-block ol {
@@ -628,7 +629,7 @@ main {
 .docs-table td {
   padding: 10px 14px;
   text-align: left;
-  border-bottom: 1px solid var(--border-card);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .docs-table th {
@@ -640,7 +641,7 @@ main {
 }
 
 .docs-table td {
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 .docs-table tr:last-child td {
@@ -717,7 +718,7 @@ code {
 
 .pwa-steps li {
   margin-bottom: 10px;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   font-size: 0.9rem;
   line-height: 1.5;
 }

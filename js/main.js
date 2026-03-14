@@ -1,4 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Scroll effect for floating navbar
+  const navbar = document.querySelector('.navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) {
+      navbar.style.background = 'var(--glass-bg-heavy)';
+      navbar.style.top = '12px';
+      navbar.style.padding = '0 8px';
+    } else {
+      navbar.style.background = 'rgba(20, 20, 35, 0.6)';
+      navbar.style.top = '24px';
+      navbar.style.padding = '0';
+    }
+  });
+
   // Hamburger menu toggle
   const hamburger = document.querySelector('.hamburger');
   const navLinks = document.querySelector('.navbar-links');

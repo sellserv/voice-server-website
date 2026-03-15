@@ -851,19 +851,21 @@ code {
 }
 
 .download-icon {
-  font-size: 3rem;
   margin-bottom: 16px;
   color: var(--accent);
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 64px;
+  width: 100%;
+  height: 56px;
 }
 
 .download-icon svg {
-  width: 48px;
+  width: auto;
   height: 48px;
+  max-width: 48px;
   display: block;
+  flex-shrink: 0;
 }
 
 .download-card h3 {

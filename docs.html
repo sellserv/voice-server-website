@@ -57,6 +57,7 @@
                 <li><a href="#admin-setup">Admin Setup</a></li>
                 <li><a href="#email-setup">Email Setup (Resend)</a></li>
                 <li><a href="#cloudflare">Cloudflare Setup</a></li>
+                <li><a href="#turnstile">Cloudflare Turnstile (CAPTCHA)</a></li>
                 <li><a href="#auto-deploy">Auto-Deploy (GitHub Actions)</a></li>
                 <li><a href="#giphy">GIPHY API</a></li>
               </ul>
@@ -201,6 +202,23 @@ EMAIL_FROM=noreply@your-domain.com</code></pre>
                 <li>Save the private key to <code>/etc/ssl/voip-server/origin-key.pem</code></li>
                 <li>Set SSL/TLS mode to <strong>Full (strict)</strong></li>
               </ol>
+            </div>
+
+            <div id="turnstile" class="docs-block reveal">
+              <h2>Cloudflare Turnstile (CAPTCHA)</h2>
+              <p>Turnstile adds CAPTCHA protection to the registration form, preventing automated bot signups. Optional — if not configured, registration works without CAPTCHA.</p>
+              <ol>
+                <li>Go to the <a href="https://dash.cloudflare.com/?to=/:account/turnstile" target="_blank" rel="noopener">Cloudflare Turnstile dashboard</a></li>
+                <li>Click <strong>Add site</strong> and enter your domain</li>
+                <li>Choose widget mode (<strong>Managed</strong> recommended)</li>
+                <li>Copy the <strong>Site Key</strong> and <strong>Secret Key</strong></li>
+                <li>Add both to your <code>.env</code>:
+                  <pre><code>TURNSTILE_SITE_KEY=0x4AAAAAAA...
+TURNSTILE_SECRET_KEY=0x4AAAAAAA...</code></pre>
+                </li>
+                <li>Restart the server: <code>sudo systemctl restart voip-server</code></li>
+              </ol>
+              <p class="text-secondary" style="margin-top: 12px;">Once configured, the registration page will show a Turnstile challenge automatically.</p>
             </div>
 
             <div id="auto-deploy" class="docs-block reveal">

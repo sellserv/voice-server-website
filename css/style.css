@@ -844,6 +844,12 @@ code {
   text-align: center;
 }
 
+.store-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .download-icon {
   font-size: 3rem;
   margin-bottom: 16px;

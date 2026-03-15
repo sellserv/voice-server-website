@@ -48,41 +48,14 @@
 
         <!-- Instance Widget -->
         <div class="server-widget glass-card" id="server-widget">
-          <div class="widget-loading" id="widget-loading">
-            <div class="widget-spinner"></div>
-            <span>Connecting to instance...</span>
-          </div>
-
-          <div class="widget-content" id="widget-content" style="display:none;">
+          <div class="widget-content">
             <div class="widget-header">
               <div class="widget-icon">
                 <img src="assets/favicon.svg" alt="" class="widget-icon-img">
               </div>
               <div class="widget-info">
                 <h2>SellServ Voice</h2>
-                <div class="widget-status">
-                  <span class="status-dot online"></span>
-                  <span id="widget-online">0</span> Online Now
-                </div>
-              </div>
-            </div>
-
-            <div class="widget-stats">
-              <div class="stat-card">
-                <span class="stat-value" id="stat-users">—</span>
-                <span class="stat-label">Users</span>
-              </div>
-              <div class="stat-card">
-                <span class="stat-value" id="stat-servers">—</span>
-                <span class="stat-label">Servers</span>
-              </div>
-              <div class="stat-card">
-                <span class="stat-value" id="stat-messages">—</span>
-                <span class="stat-label">Messages</span>
-              </div>
-              <div class="stat-card">
-                <span class="stat-value" id="stat-online">—</span>
-                <span class="stat-label">Online</span>
+                <p class="widget-tagline">Official Instance</p>
               </div>
             </div>
 
@@ -105,9 +78,6 @@
             </div>
           </div>
 
-          <div class="widget-error" id="widget-error" style="display:none;">
-            <span>Could not reach the instance. It may be temporarily offline.</span>
-          </div>
         </div>
 
         <!-- How it works -->
@@ -148,46 +118,14 @@
 
   <script src="js/main.js"></script>
   <script>
-    (async function() {
-      const INSTANCE_URL = 'https://chat.sellserv.net';
-
-      const loading = document.getElementById('widget-loading');
-      const content = document.getElementById('widget-content');
-      const error = document.getElementById('widget-error');
-
-      try {
-        const res = await fetch(INSTANCE_URL + '/api/public/instance/info');
-        if (!res.ok) throw new Error('Failed to fetch');
-        const data = await res.json();
-
-        function formatNum(n) {
-          if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
-          if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
-          return n.toString();
-        }
-
-        document.getElementById('widget-online').textContent = data.onlineCount;
-        document.getElementById('stat-users').textContent = formatNum(data.totalUsers);
-        document.getElementById('stat-servers').textContent = formatNum(data.totalServers);
-        document.getElementById('stat-messages').textContent = formatNum(data.totalMessages);
-        document.getElementById('stat-online').textContent = data.onlineCount;
-
-        loading.style.display = 'none';
-        content.style.display = 'block';
-      } catch (e) {
-        loading.style.display = 'none';
-        error.style.display = 'flex';
-      }
-
-      document.getElementById('copy-btn').addEventListener('click', function() {
-        navigator.clipboard.writeText(INSTANCE_URL).then(() => {
-          this.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
-          setTimeout(() => {
-            this.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
-          }, 2000);
-        });
+    document.getElementById('copy-btn').addEventListener('click', function() {
+      navigator.clipboard.writeText('https://chat.sellserv.net').then(() => {
+        this.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+        setTimeout(() => {
+          this.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+        }, 2000);
       });
-    })();
+    });
   </script>
 </body>
 </html>

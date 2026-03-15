@@ -1135,6 +1135,16 @@ code {
   text-align: center;
 }
 
+.widget-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.widget-actions .join-btn {
+  flex: 1;
+  text-align: center;
+}
+
 .widget-error {
   display: flex;
   align-items: center;
@@ -1144,6 +1154,64 @@ code {
   font-size: 0.9rem;
 }
 
+/* How to Join */
+.how-it-works {
+  margin-top: 48px;
+  text-align: center;
+}
+
+.how-it-works h2 {
+  font-size: 1.5rem;
+  margin-bottom: 24px;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.step-card {
+  padding: 32px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-weight: 800;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+.step-card h3 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.step-card p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 600px) {
   .widget-stats {
     grid-template-columns: repeat(2, 1fr);
@@ -1151,5 +1219,9 @@ code {
 
   .server-widget {
     padding: 24px;
+  }
+
+  .widget-actions {
+    flex-direction: column;
   }
 }

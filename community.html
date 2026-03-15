@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Official Server — SellServ Voice</title>
-  <meta name="description" content="Join the official SellServ Voice community server.">
+  <meta name="description" content="Join the official SellServ Voice instance — create your own server, invite friends, and start chatting.">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,57 +39,57 @@
     <section class="page-header">
       <div class="container">
         <h1>Official Server</h1>
-        <p class="text-secondary">Join the SellServ Voice community — chat, get support, and hang out.</p>
+        <p class="text-secondary">The official SellServ Voice instance — create an account, start your own server, and invite anyone.</p>
       </div>
     </section>
 
     <section class="community-section">
       <div class="container">
+
+        <!-- Instance Widget -->
         <div class="server-widget glass-card" id="server-widget">
           <div class="widget-loading" id="widget-loading">
             <div class="widget-spinner"></div>
-            <span>Loading server info...</span>
+            <span>Connecting to instance...</span>
           </div>
 
           <div class="widget-content" id="widget-content" style="display:none;">
             <div class="widget-header">
-              <div class="widget-icon" id="widget-icon">
-                <span id="widget-icon-initial"></span>
+              <div class="widget-icon">
+                <img src="assets/favicon.svg" alt="" class="widget-icon-img">
               </div>
               <div class="widget-info">
-                <h2 id="widget-name"></h2>
+                <h2>SellServ Voice</h2>
                 <div class="widget-status">
                   <span class="status-dot online"></span>
-                  <span id="widget-online">0</span> Online
-                  <span class="status-sep"></span>
-                  <span id="widget-members">0</span> Members
+                  <span id="widget-online">0</span> Online Now
                 </div>
               </div>
             </div>
 
             <div class="widget-stats">
               <div class="stat-card">
-                <span class="stat-value" id="stat-text-channels">0</span>
-                <span class="stat-label">Text Channels</span>
+                <span class="stat-value" id="stat-users">—</span>
+                <span class="stat-label">Users</span>
               </div>
               <div class="stat-card">
-                <span class="stat-value" id="stat-voice-channels">0</span>
-                <span class="stat-label">Voice Channels</span>
+                <span class="stat-value" id="stat-servers">—</span>
+                <span class="stat-label">Servers</span>
               </div>
               <div class="stat-card">
-                <span class="stat-value" id="stat-members">0</span>
-                <span class="stat-label">Members</span>
+                <span class="stat-value" id="stat-messages">—</span>
+                <span class="stat-label">Messages</span>
               </div>
               <div class="stat-card">
-                <span class="stat-value" id="stat-online">0</span>
-                <span class="stat-label">Online Now</span>
+                <span class="stat-value" id="stat-online">—</span>
+                <span class="stat-label">Online</span>
               </div>
             </div>
 
             <div class="widget-connect">
-              <div class="connect-label">Server URL</div>
+              <div class="connect-label">Instance URL</div>
               <div class="connect-url-row">
-                <code class="connect-url" id="connect-url"></code>
+                <code class="connect-url" id="connect-url">https://chat.sellserv.net</code>
                 <button class="copy-btn" id="copy-btn" title="Copy URL">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -97,14 +97,41 @@
                   </svg>
                 </button>
               </div>
-              <a href="https://chat.sellserv.net" class="btn btn-primary join-btn" target="_blank" rel="noopener">Join Server</a>
+            </div>
+
+            <div class="widget-actions">
+              <a href="https://chat.sellserv.net" class="btn btn-primary join-btn" target="_blank" rel="noopener">Open in Browser</a>
+              <a href="downloads.html" class="btn btn-secondary join-btn">Download Desktop App</a>
             </div>
           </div>
 
           <div class="widget-error" id="widget-error" style="display:none;">
-            <span>Could not load server info. Try again later.</span>
+            <span>Could not reach the instance. It may be temporarily offline.</span>
           </div>
         </div>
+
+        <!-- How it works -->
+        <div class="how-it-works">
+          <h2>How to Join</h2>
+          <div class="steps-grid">
+            <div class="glass-card step-card">
+              <div class="step-number">1</div>
+              <h3>Connect</h3>
+              <p>Open <strong>chat.sellserv.net</strong> in your browser or enter the URL in the desktop app's server field.</p>
+            </div>
+            <div class="glass-card step-card">
+              <div class="step-number">2</div>
+              <h3>Create an Account</h3>
+              <p>Sign up with a username, email, and password. You'll get a verification email to activate your account.</p>
+            </div>
+            <div class="glass-card step-card">
+              <div class="step-number">3</div>
+              <h3>Create a Server</h3>
+              <p>Once logged in, click the <strong>+</strong> button to create your own server. Set a name, invite friends, and start chatting.</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   </main>
@@ -122,32 +149,28 @@
   <script src="js/main.js"></script>
   <script>
     (async function() {
-      const SERVER_URL = 'https://chat.sellserv.net';
-      const SERVER_ID = '102838a7-9755-453b-8571-71f2671eb411';
+      const INSTANCE_URL = 'https://chat.sellserv.net';
 
       const loading = document.getElementById('widget-loading');
       const content = document.getElementById('widget-content');
       const error = document.getElementById('widget-error');
 
       try {
-        const res = await fetch(`${SERVER_URL}/api/public/server/${SERVER_ID}/info`);
+        const res = await fetch(INSTANCE_URL + '/api/public/instance/info');
         if (!res.ok) throw new Error('Failed to fetch');
         const data = await res.json();
 
-        document.getElementById('widget-name').textContent = data.name;
-        document.getElementById('widget-icon-initial').textContent = data.name.charAt(0).toUpperCase();
-        document.getElementById('widget-online').textContent = data.onlineCount;
-        document.getElementById('widget-members').textContent = data.memberCount;
-        document.getElementById('stat-text-channels').textContent = data.channelCount;
-        document.getElementById('stat-voice-channels').textContent = data.voiceChannelCount;
-        document.getElementById('stat-members').textContent = data.memberCount;
-        document.getElementById('stat-online').textContent = data.onlineCount;
-        document.getElementById('connect-url').textContent = SERVER_URL;
-
-        if (data.icon_url) {
-          const iconEl = document.getElementById('widget-icon');
-          iconEl.innerHTML = `<img src="${SERVER_URL}${data.icon_url}" alt="" class="widget-icon-img">`;
+        function formatNum(n) {
+          if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+          if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+          return n.toString();
         }
+
+        document.getElementById('widget-online').textContent = data.onlineCount;
+        document.getElementById('stat-users').textContent = formatNum(data.totalUsers);
+        document.getElementById('stat-servers').textContent = formatNum(data.totalServers);
+        document.getElementById('stat-messages').textContent = formatNum(data.totalMessages);
+        document.getElementById('stat-online').textContent = data.onlineCount;
 
         loading.style.display = 'none';
         content.style.display = 'block';
@@ -157,8 +180,8 @@
       }
 
       document.getElementById('copy-btn').addEventListener('click', function() {
-        navigator.clipboard.writeText(SERVER_URL).then(() => {
-          this.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+        navigator.clipboard.writeText(INSTANCE_URL).then(() => {
+          this.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
           setTimeout(() => {
             this.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
           }, 2000);

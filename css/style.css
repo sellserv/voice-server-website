@@ -640,6 +640,10 @@ main {
   text-align: center;
 }
 
+.cta-section.alt {
+  padding-bottom: 80px;
+}
+
 .cta-content h2 {
   margin-bottom: 16px;
 }

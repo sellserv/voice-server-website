@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Official Server — SellServ Voice</title>
+  <meta name="description" content="Join the official SellServ Voice community server.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb"></div><div class="orb"></div><div class="orb"></div>
+  </div>
+
+  <nav class="navbar">
+    <div class="container">
+      <a href="https://info.sellserv.net" class="navbar-brand">
+        <img src="assets/favicon.svg" alt="">SellServ Voice
+      </a>
+      <button class="hamburger" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="navbar-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="features.html">Features</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="downloads.html">Downloads</a></li>
+        <li><a href="community.html" class="active">Server</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <h1>Official Server</h1>
+        <p class="text-secondary">Join the SellServ Voice community — chat, get support, and hang out.</p>
+      </div>
+    </section>
+
+    <section class="community-section">
+      <div class="container">
+        <div class="server-widget glass-card" id="server-widget">
+          <div class="widget-loading" id="widget-loading">
+            <div class="widget-spinner"></div>
+            <span>Loading server info...</span>
+          </div>
+
+          <div class="widget-content" id="widget-content" style="display:none;">
+            <div class="widget-header">
+              <div class="widget-icon" id="widget-icon">
+                <span id="widget-icon-initial"></span>
+              </div>
+              <div class="widget-info">
+                <h2 id="widget-name"></h2>
+                <div class="widget-status">
+                  <span class="status-dot online"></span>
+                  <span id="widget-online">0</span> Online
+                  <span class="status-sep"></span>
+                  <span id="widget-members">0</span> Members
+                </div>
+              </div>
+            </div>
+
+            <div class="widget-stats">
+              <div class="stat-card">
+                <span class="stat-value" id="stat-text-channels">0</span>
+                <span class="stat-label">Text Channels</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-value" id="stat-voice-channels">0</span>
+                <span class="stat-label">Voice Channels</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-value" id="stat-members">0</span>
+                <span class="stat-label">Members</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-value" id="stat-online">0</span>
+                <span class="stat-label">Online Now</span>
+              </div>
+            </div>
+
+            <div class="widget-connect">
+              <div class="connect-label">Server URL</div>
+              <div class="connect-url-row">
+                <code class="connect-url" id="connect-url"></code>
+                <button class="copy-btn" id="copy-btn" title="Copy URL">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                </button>
+              </div>
+              <a href="https://chat.sellserv.net" class="btn btn-primary join-btn" target="_blank" rel="noopener">Join Server</a>
+            </div>
+          </div>
+
+          <div class="widget-error" id="widget-error" style="display:none;">
+            <span>Could not load server info. Try again later.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <span>&copy; 2026 SellServ Voice</span>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://github.com/sellserv/voice-server" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    (async function() {
+      const SERVER_URL = 'https://chat.sellserv.net';
+      const SERVER_ID = '102838a7-9755-453b-8571-71f2671eb411';
+
+      const loading = document.getElementById('widget-loading');
+      const content = document.getElementById('widget-content');
+      const error = document.getElementById('widget-error');
+
+      try {
+        const res = await fetch(`${SERVER_URL}/api/public/server/${SERVER_ID}/info`);
+        if (!res.ok) throw new Error('Failed to fetch');
+        const data = await res.json();
+
+        document.getElementById('widget-name').textContent = data.name;
+        document.getElementById('widget-icon-initial').textContent = data.name.charAt(0).toUpperCase();
+        document.getElementById('widget-online').textContent = data.onlineCount;
+        document.getElementById('widget-members').textContent = data.memberCount;
+        document.getElementById('stat-text-channels').textContent = data.channelCount;
+        document.getElementById('stat-voice-channels').textContent = data.voiceChannelCount;
+        document.getElementById('stat-members').textContent = data.memberCount;
+        document.getElementById('stat-online').textContent = data.onlineCount;
+        document.getElementById('connect-url').textContent = SERVER_URL;
+
+        if (data.icon_url) {
+          const iconEl = document.getElementById('widget-icon');
+          iconEl.innerHTML = `<img src="${SERVER_URL}${data.icon_url}" alt="" class="widget-icon-img">`;
+        }
+
+        loading.style.display = 'none';
+        content.style.display = 'block';
+      } catch (e) {
+        loading.style.display = 'none';
+        error.style.display = 'flex';
+      }
+
+      document.getElementById('copy-btn').addEventListener('click', function() {
+        navigator.clipboard.writeText(SERVER_URL).then(() => {
+          this.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+          setTimeout(() => {
+            this.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+          }, 2000);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

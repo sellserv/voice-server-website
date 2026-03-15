@@ -853,6 +853,15 @@ code {
 .download-icon {
   font-size: 3rem;
   margin-bottom: 16px;
+  color: var(--accent);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.download-icon svg {
+  width: 48px;
+  height: 48px;
 }
 
 .download-card h3 {

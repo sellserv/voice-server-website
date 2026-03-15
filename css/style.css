@@ -857,11 +857,13 @@ code {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 64px;
 }
 
 .download-icon svg {
   width: 48px;
   height: 48px;
+  display: block;
 }
 
 .download-card h3 {

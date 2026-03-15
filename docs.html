@@ -54,7 +54,7 @@
                 <li><a href="#quick-start">Quick Start (Dev)</a></li>
                 <li><a href="#setup-script">Setup Script (Production)</a></li>
                 <li><a href="#environment">Environment Config</a></li>
-                <li><a href="#first-account">First Account Setup</a></li>
+                <li><a href="#admin-setup">Admin Setup</a></li>
                 <li><a href="#email-setup">Email Setup (Resend)</a></li>
                 <li><a href="#cloudflare">Cloudflare Setup</a></li>
                 <li><a href="#auto-deploy">Auto-Deploy (GitHub Actions)</a></li>
@@ -86,11 +86,11 @@ npm install
 cp .env.example .env
 
 # Generate a secure JWT secret
-sed -i "0,/change-me-to-a-random-string/s/change-me-to-a-random-string/$(openssl rand -hex 32)/" .env
+sed -i "s/change-me-to-a-random-string/$(openssl rand -hex 32)/" .env
 
 # Run dev mode (server + client with hot reload)
 npm run dev</code></pre>
-              <p class="text-secondary" style="margin-top: 12px;">In dev mode without <code>SETUP_TOKEN</code> set, the first user gets admin freely. Open <code>http://localhost:3000</code> to access the app.</p>
+              <p class="text-secondary" style="margin-top: 12px;">Open <code>http://localhost:5173</code> to access the app. See <a href="#admin-setup">Admin Setup</a> to configure your admin account.</p>
             </div>
 
             <div id="setup-script" class="docs-block reveal">
@@ -105,7 +105,7 @@ npm run dev</code></pre>
                 <li>SSH hardening (password auth disabled, root login restricted to key-only)</li>
                 <li>fail2ban for brute-force protection</li>
                 <li>Dedicated <code>voip-server</code> system user</li>
-                <li><code>.env</code> with auto-generated JWT secret and setup token</li>
+                <li><code>.env</code> with auto-generated JWT secret</li>
                 <li>SSL certificate directory with restricted permissions</li>
                 <li>systemd service with full sandboxing (syscall filters, capability restrictions, resource limits)</li>
               </ul>
@@ -133,7 +133,7 @@ sudo systemctl start voip-server</code></pre>
 
             <div id="environment" class="docs-block reveal">
               <h2>Environment Configuration</h2>
-              <p>After running the setup script, your <code>.env</code> file is at <code>/opt/voip-server/.env</code>. The script auto-generates a JWT secret and setup token. You still need to configure:</p>
+              <p>After running the setup script, your <code>.env</code> file is at <code>/opt/voip-server/.env</code>. The script auto-generates a JWT secret. You still need to configure:</p>
               <h3>Required</h3>
               <pre><code># Set to your server's public IP — required for WebRTC voice
 MEDIASOUP_ANNOUNCED_IP=203.0.113.50
@@ -150,17 +150,21 @@ GIPHY_API_KEY=your-giphy-api-key</code></pre>
               <p class="text-secondary" style="margin-top: 12px;">After editing, restart the service: <code>sudo systemctl restart voip-server</code></p>
             </div>
 
-            <div id="first-account" class="docs-block reveal">
-              <h2>First Account (Admin) Setup</h2>
-              <p>The first user to register becomes the server admin. To prevent unauthorized admin claims, the server requires a <strong>setup token</strong> for the first registration.</p>
+            <div id="admin-setup" class="docs-block reveal">
+              <h2>Admin Setup</h2>
+              <p>Instance admins are configured via the <code>ADMIN_USERS</code> environment variable — a comma-separated list of usernames with full platform control.</p>
               <ol>
-                <li>The setup script auto-generates a <code>SETUP_TOKEN</code> and prints it to the console — <strong>copy it</strong>.</li>
-                <li>Open your server in a browser and click <strong>Register</strong>.</li>
-                <li>The registration form will show a <strong>Setup Token</strong> field.</li>
-                <li>Paste the token, fill in your details, and register — you're now the admin.</li>
-                <li>After the first account is created, subsequent registrations require an invite code instead.</li>
+                <li>Register an account at your server URL</li>
+                <li>Verify your email address</li>
+                <li>Add your username to <code>ADMIN_USERS</code> in <code>.env</code>:
+                  <pre><code>ADMIN_USERS=yourusername</code></pre>
+                </li>
+                <li>Restart the server:
+                  <pre><code>sudo systemctl restart voip-server</code></pre>
+                </li>
+                <li>Your account now has instance admin access — create invite codes from the admin panel to let others join</li>
               </ol>
-              <p class="text-secondary" style="margin-top: 12px;">You can find or change the setup token in your <code>.env</code> file: <code>SETUP_TOKEN=your-generated-token-here</code></p>
+              <p class="text-secondary" style="margin-top: 12px;">Multiple admins can be set with a comma-separated list: <code>ADMIN_USERS=admin1,admin2</code></p>
             </div>
 
             <div id="email-setup" class="docs-block reveal">

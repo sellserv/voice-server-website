@@ -961,6 +961,29 @@ code {
   color: white;
 }
 
+.privacy-note {
+  margin: 24px 0;
+  padding: 24px;
+  background: rgba(124, 92, 252, 0.05);
+  border: 1px solid rgba(124, 92, 252, 0.2);
+  border-radius: var(--radius);
+}
+
+.privacy-note strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--accent-hover);
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.privacy-note p {
+  margin-bottom: 0;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
 /* ===== Community / Server Widget ===== */
 .community-section {
   padding: 0 0 80px;

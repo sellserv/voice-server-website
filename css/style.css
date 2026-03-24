@@ -634,8 +634,12 @@ section {
 }
 
 .reg-status-dot.closed {
-  background: var(--accent-warning);
-  box-shadow: 0 0 10px rgba(245, 166, 35, 0.4);
+  background: #f87171;
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.4);
+}
+
+.reg-status-dot.error {
+  background: var(--text-dim);
 }
 
 .widget-connect {

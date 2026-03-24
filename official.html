@@ -138,6 +138,7 @@
           text.textContent = 'Registration is currently closed';
         }
       } catch {
+        dot.classList.add('error');
         text.textContent = 'Could not check registration status';
       }
     })();

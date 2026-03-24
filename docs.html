@@ -52,6 +52,8 @@
               <h4>On This Page</h4>
               <ul>
                 <li><a href="#prerequisites">Prerequisites</a></li>
+                <li><a href="#system-overview">System Overview</a></li>
+                <li><a href="#features">All Features</a></li>
                 <li><a href="#quick-start">Quick Start (Dev)</a></li>
                 <li><a href="#setup-script">Setup Script (Production)</a></li>
                 <li><a href="#environment">Environment Config</a></li>
@@ -72,6 +74,41 @@
                 <li><strong>Node.js 22</strong> or later (<a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a>)</li>
                 <li><strong>npm</strong> — comes with Node.js</li>
                 <li><strong>Ubuntu 24.04 LTS</strong> or Debian 12+ recommended for production</li>
+              </ul>
+            </div>
+
+            <div id="system-overview" class="docs-block reveal">
+              <h2>System Overview</h2>
+              <p>SellServ Voice is built with modern, high-performance technologies designed for low latency and security.</p>
+              <table class="docs-table">
+                <thead><tr><th>Layer</th><th>Technology</th></tr></thead>
+                <tbody>
+                  <tr><td>Runtime</td><td>Node.js 22</td></tr>
+                  <tr><td>Frontend</td><td>SvelteKit + Svelte 5</td></tr>
+                  <tr><td>Database</td><td>SQLite via better-sqlite3 + FTS5</td></tr>
+                  <tr><td>Voice/Video</td><td>mediasoup 3.15 (WebRTC SFU)</td></tr>
+                  <tr><td>Auth</td><td>bcrypt + JWT + otpauth (TOTP)</td></tr>
+                  <tr><td>Desktop</td><td>Electron</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div id="features" class="docs-block reveal">
+              <h2>All Features</h2>
+              <h3>Communication</h3>
+              <ul>
+                <li><strong>Text Chat</strong> — Real-time messaging, editing, replies, pins, reactions, full-text search.</li>
+                <li><strong>Voice Chat</strong> — WebRTC audio, VAD/PTT, speaking indicators, per-user volume.</li>
+                <li><strong>Video Calls</strong> — 1-on-1 video with webcam support and PiP preview.</li>
+                <li><strong>Friends System</strong> — Add friends, see online status, manage mutual servers.</li>
+                <li><strong>Polls</strong> — Create polls in chat channels with real-time voting, auto-expiry, and winner announcements.</li>
+              </ul>
+              <h3 style="margin-top: 20px;">Apps & Identity</h3>
+              <ul>
+                <li><strong>Watch Together</strong> — Synchronized YouTube watching in voice channels.</li>
+                <li><strong>Soundboard</strong> — Upload and play short clips in voice.</li>
+                <li><strong>Voice Changer</strong> — 6 real-time audio presets (Deep, Robot, etc).</li>
+                <li><strong>Profile Banners</strong> — Customize your presence with static or GIF banners.</li>
               </ul>
             </div>
 

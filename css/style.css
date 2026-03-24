@@ -1406,3 +1406,132 @@ code {
     flex-direction: column;
   }
 }
+
+/* ===== Pro Page ===== */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.pricing-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 48px;
+}
+
+.pricing-header {
+  margin-bottom: 32px;
+}
+
+.plan-name {
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.plan-price {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.plan-price span {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  margin-left: 4px;
+}
+
+.pricing-card.featured {
+  background: rgba(124, 92, 252, 0.05);
+  border-color: rgba(124, 92, 252, 0.3);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6), 0 0 32px rgba(124, 92, 252, 0.1);
+}
+
+.pricing-card.featured .plan-name {
+  color: var(--accent-hover);
+}
+
+.benefits-list {
+  list-style: none;
+  margin-bottom: 40px;
+  flex: 1;
+}
+
+.benefits-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.benefits-list li svg {
+  flex-shrink: 0;
+  margin-top: 4px;
+  color: var(--accent);
+}
+
+.benefits-list li.disabled {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+.benefits-list li.disabled svg {
+  color: var(--text-dim);
+}
+
+.pro-badge-mini {
+  display: inline-flex;
+  padding: 2px 8px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.self-host-note {
+  margin-top: 64px;
+  padding: 32px;
+  background: rgba(45, 212, 168, 0.03);
+  border: 1px solid rgba(45, 212, 168, 0.1);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.self-host-note h3 {
+  color: var(--accent-success);
+  margin-bottom: 8px;
+}
+
+.self-host-note p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+  .pricing-card {
+    padding: 32px;
+  }
+}

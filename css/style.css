@@ -568,6 +568,22 @@ section {
   color: var(--text-dim);
 }
 
+.plan-price-future {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  margin-top: -12px;
+  margin-bottom: 20px;
+}
+
+.plan-price-future s {
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.plan-price-future span {
+  font-weight: 500;
+}
+
 .benefits-list li.disabled {
   opacity: 0.35;
 }

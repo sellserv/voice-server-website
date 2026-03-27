@@ -501,6 +501,19 @@ section {
   flex-wrap: wrap;
 }
 
+.hero-screenshot {
+  margin-top: 48px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border-bright);
+  box-shadow: 0 16px 64px rgba(0, 0, 0, 0.5);
+}
+
+.hero-screenshot img {
+  width: 100%;
+  display: block;
+}
+
 /* ===== CTA Sections (Home) ===== */
 .cta-section {
   text-align: center;

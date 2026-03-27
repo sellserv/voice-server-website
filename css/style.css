@@ -15,7 +15,7 @@
   --accent-muted: #3b44b0;
   --accent-glow: rgba(88, 101, 242, 0.25);
   --accent-subtle: rgba(88, 101, 242, 0.08);
-  --accent-success: #2dd4a8;
+  --accent-success: #8b9cc7;
   --accent-warning: #f5a623;
 
   /* Text */
@@ -70,7 +70,7 @@ body {
   background: var(--bg-darkest);
   background-image: 
     radial-gradient(circle at 15% 50%, rgba(88, 101, 242, 0.03), transparent 30%),
-    radial-gradient(circle at 85% 30%, rgba(45, 212, 168, 0.02), transparent 30%);
+    radial-gradient(circle at 85% 30%, rgba(139, 156, 199, 0.03), transparent 30%);
   color: var(--text);
   line-height: 1.6;
   min-height: 100vh;
@@ -125,7 +125,7 @@ img {
 .bg-orbs .orb:nth-child(2) {
   width: 600px;
   height: 600px;
-  background: #2dd4a8;
+  background: #8b9cc7;
   bottom: -200px;
   right: -100px;
 }

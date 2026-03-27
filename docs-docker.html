@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docker Setup — SellServ Voice</title>
+  <meta name="description" content="Deploy SellServ Voice with Docker Compose in minutes.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb"></div><div class="orb"></div><div class="orb"></div>
+  </div>
+
+  <nav class="navbar">
+    <div class="container">
+      <a href="https://info.sellserv.net" class="navbar-brand">
+        <img src="assets/favicon.svg" alt="">SellServ Voice <span class="badge-alpha">Alpha</span>
+      </a>
+      <button class="hamburger" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="navbar-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="pro.html">Pro</a></li>
+        <li><a href="docs.html" class="active">Docs</a></li>
+        <li><a href="downloads.html">Downloads</a></li>
+        <li><a href="official.html">Server</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <p class="breadcrumb"><a href="docs.html">Docs</a> / Docker Setup</p>
+        <h1>Docker Setup</h1>
+        <p class="text-secondary">Deploy SellServ Voice with Docker Compose in minutes.</p>
+      </div>
+    </section>
+
+    <section class="docs-cards-section">
+      <div class="container container-tight">
+        <div class="glass-card docs-card reveal">
+
+          <h2>Prerequisites</h2>
+          <ul>
+            <li><a href="https://docs.docker.com/get-docker/" target="_blank" rel="noopener">Docker</a> and Docker Compose installed</li>
+            <li>A server with a public IP address</li>
+            <li>UDP ports 40000-40100 open in your firewall</li>
+          </ul>
+
+          <h3>1. Download the Compose File</h3>
+          <pre><code>curl -O https://raw.githubusercontent.com/sellserv/voice-server/main/docker-compose.yml</code></pre>
+
+          <h3>2. Configure Environment</h3>
+          <p>Open the file and set the required variables:</p>
+          <pre><code>nano docker-compose.yml</code></pre>
+          <p><strong>Required:</strong></p>
+          <ul>
+            <li><code>JWT_SECRET</code> — Generate with <code>openssl rand -hex 32</code></li>
+            <li><code>MEDIASOUP_ANNOUNCED_IP</code> — Your server's public IP address</li>
+          </ul>
+          <p style="margin-top: 12px;"><strong>Recommended:</strong></p>
+          <ul>
+            <li><code>CORS_ORIGINS</code> — Your domain (e.g. <code>https://chat.example.com</code>)</li>
+            <li><code>ADMIN_USERS</code> — Your username for instance admin access</li>
+            <li><code>RESEND_API_KEY</code> + <code>EMAIL_FROM</code> — For email MFA and verification</li>
+          </ul>
+
+          <h3>3. Start the Server</h3>
+          <pre><code>docker compose up -d</code></pre>
+          <p>Your instance is now running at <code>http://your-server-ip:3000</code></p>
+
+          <h3>4. Admin Setup</h3>
+          <ol>
+            <li>Register an account on your instance</li>
+            <li>Verify your email (if email is configured)</li>
+            <li>Add your username to <code>ADMIN_USERS</code> in the compose file</li>
+            <li>Restart: <code>docker compose up -d</code></li>
+          </ol>
+
+          <h3>Updating</h3>
+          <pre><code>docker compose pull
+docker compose up -d</code></pre>
+          <p>Data and uploads persist across updates via Docker volumes. Database migrations run automatically on startup.</p>
+
+          <h3>All Environment Variables</h3>
+          <table class="docs-table">
+            <thead><tr><th>Variable</th><th>Required</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><code>JWT_SECRET</code></td><td>Yes</td><td>Run <code>openssl rand -hex 32</code></td></tr>
+              <tr><td><code>MEDIASOUP_ANNOUNCED_IP</code></td><td>Yes</td><td>Server's public IP for WebRTC voice</td></tr>
+              <tr><td><code>CORS_ORIGINS</code></td><td>Recommended</td><td>Your domain (e.g. <code>https://chat.example.com</code>)</td></tr>
+              <tr><td><code>ADMIN_USERS</code></td><td>Recommended</td><td>Comma-separated admin usernames</td></tr>
+              <tr><td><code>RESEND_API_KEY</code></td><td>Recommended</td><td>For email MFA and verification</td></tr>
+              <tr><td><code>EMAIL_FROM</code></td><td>Recommended</td><td>Sender address (e.g. <code>noreply@example.com</code>)</td></tr>
+              <tr><td><code>GIPHY_API_KEY</code></td><td>Optional</td><td>Enables GIF picker</td></tr>
+              <tr><td><code>TURNSTILE_SITE_KEY</code></td><td>Optional</td><td>Cloudflare CAPTCHA on registration</td></tr>
+              <tr><td><code>TURNSTILE_SECRET_KEY</code></td><td>Optional</td><td>Cloudflare CAPTCHA secret</td></tr>
+              <tr><td><code>STRIPE_SECRET_KEY</code></td><td>Optional</td><td>For Pro subscriptions</td></tr>
+              <tr><td><code>STRIPE_WEBHOOK_SECRET</code></td><td>Optional</td><td>Stripe webhook verification</td></tr>
+              <tr><td><code>STRIPE_PRO_PRICE_ID</code></td><td>Optional</td><td>Stripe price for Pro tier</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Firewall Ports</h3>
+          <table class="docs-table">
+            <thead><tr><th>Port</th><th>Protocol</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>3000</td><td>TCP</td><td>Web UI and API</td></tr>
+              <tr><td>40000-40100</td><td>UDP</td><td>WebRTC media (voice/video)</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Reverse Proxy (Production)</h3>
+          <p>For production, put nginx or Caddy in front for SSL termination. The Docker container serves HTTP on port 3000. Example nginx config:</p>
+          <pre><code>server {
+    listen 443 ssl http2;
+    server_name chat.example.com;
+
+    ssl_certificate /path/to/cert.pem;
+    ssl_certificate_key /path/to/key.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}</code></pre>
+
+          <h3>Backups</h3>
+          <p>Back up the Docker volumes to save your entire instance:</p>
+          <pre><code># Find volume paths
+docker volume inspect sellserv-data sellserv-uploads
+
+# Or copy from the container
+docker cp sellserv:/app/data ./backup-data
+docker cp sellserv:/app/uploads ./backup-uploads</code></pre>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <span>&copy; 2026 SellServ Voice</span>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="https://github.com/sellserv/voice-server" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual Install — SellServ Voice</title>
+  <meta name="description" content="Install SellServ Voice directly on Ubuntu or Debian with the included setup script.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb"></div><div class="orb"></div><div class="orb"></div>
+  </div>
+
+  <nav class="navbar">
+    <div class="container">
+      <a href="https://info.sellserv.net" class="navbar-brand">
+        <img src="assets/favicon.svg" alt="">SellServ Voice <span class="badge-alpha">Alpha</span>
+      </a>
+      <button class="hamburger" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="navbar-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="pro.html">Pro</a></li>
+        <li><a href="docs.html" class="active">Docs</a></li>
+        <li><a href="downloads.html">Downloads</a></li>
+        <li><a href="official.html">Server</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <p class="breadcrumb"><a href="docs.html">Docs</a> / Manual Install</p>
+        <h1>Manual Install</h1>
+        <p class="text-secondary">Install directly on Ubuntu 24.04 LTS or Debian 12+ with full control.</p>
+      </div>
+    </section>
+
+    <section class="docs-cards-section">
+      <div class="container container-tight">
+        <div class="glass-card docs-card reveal">
+
+          <h2>Prerequisites</h2>
+          <ul>
+            <li><strong>Ubuntu 24.04 LTS</strong> or <strong>Debian 12+</strong> (x86_64)</li>
+            <li>Root or sudo access</li>
+            <li>A domain name pointed to your server</li>
+          </ul>
+
+          <h2>What the Setup Script Does</h2>
+          <p>The included <code>deploy/setup.sh</code> configures a fresh server with:</p>
+          <ul>
+            <li>System updates + 1GB swap + automatic security updates</li>
+            <li>Node.js 22 via NodeSource</li>
+            <li>Build tools for native module compilation (mediasoup)</li>
+            <li>nginx reverse proxy with security headers, TLS hardening, and rate limiting</li>
+            <li>UFW firewall (SSH, HTTP, HTTPS, WebRTC UDP ports)</li>
+            <li>SSH hardening (password auth disabled, key-only root login)</li>
+            <li>fail2ban for brute-force protection</li>
+            <li>Dedicated <code>voip-server</code> system user</li>
+            <li><code>.env</code> with auto-generated JWT secret</li>
+            <li>systemd service with full sandboxing</li>
+          </ul>
+
+          <h2>Installation</h2>
+
+          <h3>1. Clone the Repository</h3>
+          <pre><code>git clone https://github.com/sellserv/voice-server.git /opt/voip-server
+cd /opt/voip-server</code></pre>
+
+          <h3>2. Edit and Run the Setup Script</h3>
+          <pre><code># Set your domain at the top of the script
+nano deploy/setup.sh
+
+# Run the script
+sudo bash deploy/setup.sh</code></pre>
+
+          <h3>3. Configure Environment</h3>
+          <pre><code>nano .env</code></pre>
+          <p><strong>Required:</strong></p>
+          <pre><code># Your server's public IP — required for WebRTC voice
+MEDIASOUP_ANNOUNCED_IP=203.0.113.50
+
+# Your domain
+CORS_ORIGINS=https://your-domain.com</code></pre>
+          <p style="margin-top: 12px;"><strong>Recommended:</strong></p>
+          <pre><code># Email (required for MFA login codes)
+RESEND_API_KEY=re_xxxxxxxxxxxx
+EMAIL_FROM=noreply@your-domain.com
+
+# GIF picker
+GIPHY_API_KEY=your-giphy-api-key</code></pre>
+
+          <h3>4. Install, Build, and Start</h3>
+          <pre><code>npm ci --omit=dev
+npm run build
+sudo systemctl start voip-server</code></pre>
+
+          <h2>Admin Setup</h2>
+          <ol>
+            <li>Register an account at your server URL</li>
+            <li>Verify your email</li>
+            <li>Add your username to <code>ADMIN_USERS</code> in <code>.env</code>:
+              <pre><code>ADMIN_USERS=yourusername</code></pre>
+            </li>
+            <li>Restart: <code>sudo systemctl restart voip-server</code></li>
+          </ol>
+
+          <h2>SSL Setup (Cloudflare)</h2>
+          <ol>
+            <li>Point your domain to your server's IP with <strong>Proxy ON</strong> (orange cloud)</li>
+            <li>Go to <strong>SSL/TLS &gt; Origin Server</strong> and create an Origin Certificate</li>
+            <li>Save the certificate to <code>/etc/ssl/voip-server/origin.pem</code></li>
+            <li>Save the private key to <code>/etc/ssl/voip-server/origin-key.pem</code></li>
+            <li>Set SSL/TLS mode to <strong>Full (strict)</strong></li>
+          </ol>
+
+          <h2>Email Setup (Resend)</h2>
+          <p>Email is <strong>required</strong> for MFA login codes, email verification, password resets, and account lockout notifications.</p>
+          <ol>
+            <li>Create an account at <a href="https://resend.com" target="_blank" rel="noopener">resend.com</a></li>
+            <li>Add and verify your domain under <strong>Domains</strong></li>
+            <li>Create an API key under <strong>API Keys</strong></li>
+            <li>Add to <code>.env</code> and restart</li>
+          </ol>
+
+          <h2>CAPTCHA (Optional)</h2>
+          <p>Add Cloudflare Turnstile to prevent automated signups:</p>
+          <ol>
+            <li>Go to the <a href="https://dash.cloudflare.com/?to=/:account/turnstile" target="_blank" rel="noopener">Turnstile dashboard</a> and add your site</li>
+            <li>Copy the Site Key and Secret Key</li>
+            <li>Add both to <code>.env</code>:
+              <pre><code>TURNSTILE_SITE_KEY=0x4AAAAAAA...
+TURNSTILE_SECRET_KEY=0x4AAAAAAA...</code></pre>
+            </li>
+            <li>Restart the service</li>
+          </ol>
+
+          <h2>Auto-Deploy (GitHub Actions)</h2>
+          <p>Automatically deploy on push to <code>main</code>:</p>
+          <ol>
+            <li>Create a deploy user:
+              <pre><code>sudo useradd -m -s /bin/bash deploy
+sudo usermod -aG voip-server deploy
+echo 'deploy ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart voip-server' \
+  | sudo tee /etc/sudoers.d/voip-server-deploy</code></pre>
+            </li>
+            <li>Generate and copy an SSH key:
+              <pre><code>ssh-keygen -t ed25519 -f ~/.ssh/voip-deploy -N ""
+ssh-copy-id -i ~/.ssh/voip-deploy.pub deploy@your-server-ip</code></pre>
+            </li>
+            <li>Add repository secrets in GitHub:
+              <table class="docs-table">
+                <thead><tr><th>Secret</th><th>Value</th></tr></thead>
+                <tbody>
+                  <tr><td><code>DEPLOY_HOST</code></td><td>Server IP address</td></tr>
+                  <tr><td><code>DEPLOY_USER</code></td><td><code>deploy</code></td></tr>
+                  <tr><td><code>DEPLOY_SSH_KEY</code></td><td>Private key contents</td></tr>
+                </tbody>
+              </table>
+            </li>
+          </ol>
+
+          <h2>Updating</h2>
+          <pre><code>cd /opt/voip-server
+git pull origin main
+npm ci --omit=dev
+npm run build
+sudo systemctl restart voip-server</code></pre>
+
+          <h2>Firewall Ports</h2>
+          <table class="docs-table">
+            <thead><tr><th>Port</th><th>Protocol</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>22</td><td>TCP</td><td>SSH</td></tr>
+              <tr><td>80</td><td>TCP</td><td>HTTP (redirect to HTTPS)</td></tr>
+              <tr><td>443</td><td>TCP</td><td>HTTPS</td></tr>
+              <tr><td>40000-40100</td><td>UDP</td><td>WebRTC media (voice/video)</td></tr>
+            </tbody>
+          </table>
+
+          <h2>Backups</h2>
+          <p>Back up these two directories to save your entire instance:</p>
+          <ul>
+            <li><code>/opt/voip-server/data/</code> — SQLite database</li>
+            <li><code>/opt/voip-server/uploads/</code> — User-uploaded files</li>
+          </ul>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <span>&copy; 2026 SellServ Voice</span>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="https://github.com/sellserv/voice-server" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

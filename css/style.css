@@ -484,6 +484,93 @@ section {
   border-radius: 4px;
 }
 
+.docs-column-title {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.docs-choice-card {
+  display: block;
+  padding: 24px;
+  margin-bottom: 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s var(--ease-out);
+  cursor: pointer;
+}
+
+.docs-choice-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.docs-choice-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.docs-card-icon-secondary {
+  background: var(--bg-light) !important;
+  color: var(--text-muted) !important;
+}
+
+.docs-recommended-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  background: rgba(88, 101, 242, 0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.docs-choice-card h3 {
+  font-size: 1.15rem;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.docs-choice-card p {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.docs-choice-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  transition: gap 0.15s;
+}
+
+.docs-choice-card:hover .docs-choice-link {
+  gap: 8px;
+}
+
+.breadcrumb {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.breadcrumb a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
 /* ===== Buttons ===== */
 .btn {
   display: inline-flex;

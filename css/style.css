@@ -9,12 +9,12 @@
   --bg-hover: #262640;
   --bg-active: #2e2e4a;
 
-  /* Purple accent */
-  --accent: #7c5cfc;
-  --accent-hover: #9b82fd;
-  --accent-muted: #6a4de0;
-  --accent-glow: rgba(124, 92, 252, 0.25);
-  --accent-subtle: rgba(124, 92, 252, 0.08);
+  /* Blue accent — matches SellServ logo */
+  --accent: #5865F2;
+  --accent-hover: #4752c4;
+  --accent-muted: #3b44b0;
+  --accent-glow: rgba(88, 101, 242, 0.25);
+  --accent-subtle: rgba(88, 101, 242, 0.08);
   --accent-success: #2dd4a8;
   --accent-warning: #f5a623;
 
@@ -37,7 +37,7 @@
   --glass-border-bright: rgba(255, 255, 255, 0.1);
   --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
   --glass-glow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  --glass-tint: rgba(124, 92, 252, 0.03);
+  --glass-tint: rgba(88, 101, 242, 0.03);
 
   /* Radius */
   --radius-sm: 8px;
@@ -69,7 +69,7 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
   background: var(--bg-darkest);
   background-image: 
-    radial-gradient(circle at 15% 50%, rgba(124, 92, 252, 0.03), transparent 30%),
+    radial-gradient(circle at 15% 50%, rgba(88, 101, 242, 0.03), transparent 30%),
     radial-gradient(circle at 85% 30%, rgba(45, 212, 168, 0.02), transparent 30%);
   color: var(--text);
   line-height: 1.6;
@@ -340,8 +340,8 @@ section {
 }
 
 .pricing-card.featured {
-  background: rgba(124, 92, 252, 0.05);
-  border-color: rgba(124, 92, 252, 0.3);
+  background: rgba(88, 101, 242, 0.05);
+  border-color: rgba(88, 101, 242, 0.3);
 }
 
 .plan-price {
@@ -756,7 +756,7 @@ section {
   height: 40px;
   border-radius: 50%;
   background: var(--accent-subtle);
-  border: 1px solid rgba(124, 92, 252, 0.2);
+  border: 1px solid rgba(88, 101, 242, 0.2);
   color: var(--accent);
   font-weight: 800;
   font-size: 1.1rem;
@@ -787,8 +787,8 @@ section {
   display: flex;
   gap: 16px;
   padding: 20px;
-  background: rgba(124, 92, 252, 0.04);
-  border: 1px solid rgba(124, 92, 252, 0.15);
+  background: rgba(88, 101, 242, 0.04);
+  border: 1px solid rgba(88, 101, 242, 0.15);
   border-radius: var(--radius);
   margin: 24px 0;
 }

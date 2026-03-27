@@ -498,6 +498,7 @@ section {
   color: inherit;
   transition: all 0.2s var(--ease-out);
   cursor: pointer;
+  position: relative;
 }
 
 .docs-choice-card:hover {
@@ -519,7 +520,10 @@ section {
 }
 
 .docs-recommended-badge {
-  font-size: 0.7rem;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;

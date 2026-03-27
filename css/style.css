@@ -847,6 +847,16 @@ section {
   line-height: 1.7;
 }
 
+.terms-list {
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin: 12px 0 0 20px;
+}
+
+.terms-list li {
+  margin-bottom: 4px;
+}
+
 .data-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

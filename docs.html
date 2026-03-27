@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Documentation — SellServ Voice</title>
-  <meta name="description" content="Step-by-step guide to set up and run your own SellServ Voice instance.">
+  <meta name="description" content="Self-hosting guides, system requirements, and setup instructions for SellServ Voice.">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,267 +41,146 @@
     <section class="page-header">
       <div class="container">
         <h1>Documentation</h1>
-        <p class="text-secondary">Get your server up and running in minutes.</p>
+        <p class="text-secondary">Everything you need to self-host SellServ Voice.</p>
       </div>
     </section>
 
-    <section class="docs-section">
+    <section class="docs-cards-section">
       <div class="container">
-        <div class="docs-layout">
-          <aside class="docs-sidebar">
-            <nav class="docs-nav glass-card">
-              <h4>On This Page</h4>
-              <ul>
-                <li><a href="#prerequisites">Prerequisites</a></li>
-                <li><a href="#system-overview">System Overview</a></li>
-                <li><a href="#features">All Features</a></li>
-                <li><a href="#quick-start">Quick Start (Dev)</a></li>
-                <li><a href="#setup-script">Setup Script (Production)</a></li>
-                <li><a href="#environment">Environment Config</a></li>
-                <li><a href="#admin-setup">Admin Setup</a></li>
-                <li><a href="#email-setup">Email Setup (Resend)</a></li>
-                <li><a href="#cloudflare">Cloudflare Setup</a></li>
-                <li><a href="#turnstile">Cloudflare Turnstile (CAPTCHA)</a></li>
-                <li><a href="#auto-deploy">Auto-Deploy (GitHub Actions)</a></li>
-                <li><a href="#giphy">GIPHY API</a></li>
-              </ul>
-            </nav>
-          </aside>
+        <div class="docs-cards-grid">
 
-          <div class="docs-content">
-            <div id="prerequisites" class="docs-block reveal">
-              <h2>Prerequisites</h2>
-              <ul>
-                <li><strong>Node.js 22</strong> or later (<a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a>)</li>
-                <li><strong>npm</strong> — comes with Node.js</li>
-                <li><strong>Ubuntu 24.04 LTS</strong> or Debian 12+ recommended for production</li>
-              </ul>
+          <!-- Self-Hosting Card -->
+          <div class="glass-card docs-card reveal">
+            <div class="docs-card-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
             </div>
+            <h2>Self-Hosting Guide</h2>
+            <p class="docs-card-desc">Deploy your own instance with Docker in minutes.</p>
 
-            <div id="system-overview" class="docs-block reveal">
-              <h2>System Overview</h2>
-              <p>SellServ Voice is built with modern, high-performance technologies designed for low latency and security.</p>
-              <table class="docs-table">
-                <thead><tr><th>Layer</th><th>Technology</th></tr></thead>
-                <tbody>
-                  <tr><td>Runtime</td><td>Node.js 22</td></tr>
-                  <tr><td>Frontend</td><td>SvelteKit + Svelte 5</td></tr>
-                  <tr><td>Database</td><td>SQLite via better-sqlite3 + FTS5</td></tr>
-                  <tr><td>Voice/Video</td><td>mediasoup 3.15 (WebRTC SFU)</td></tr>
-                  <tr><td>Auth</td><td>bcrypt + JWT + otpauth (TOTP)</td></tr>
-                  <tr><td>Desktop</td><td>Electron</td></tr>
-                </tbody>
-              </table>
-            </div>
+            <h3>Docker (Recommended)</h3>
+            <p>The fastest way to get running. Requires <a href="https://docs.docker.com/get-docker/" target="_blank" rel="noopener">Docker</a> installed on your server.</p>
+            <pre><code># Download the compose file
+curl -O https://raw.githubusercontent.com/sellserv/voice-server/main/docker-compose.yml
 
-            <div id="features" class="docs-block reveal">
-              <h2>All Features</h2>
-              <h3>Communication</h3>
-              <ul>
-                <li><strong>Text Chat</strong> — Real-time messaging, editing, replies, pins, reactions, full-text search.</li>
-                <li><strong>Voice Chat</strong> — WebRTC audio, VAD/PTT, speaking indicators, per-user volume.</li>
-                <li><strong>Video Calls</strong> — 1-on-1 video with webcam support and PiP preview.</li>
-                <li><strong>Friends System</strong> — Add friends, see online status, manage mutual servers.</li>
-                <li><strong>Polls</strong> — Create polls in chat channels with real-time voting, auto-expiry, and winner announcements.</li>
-              </ul>
-              <h3 style="margin-top: 20px;">Apps & Identity</h3>
-              <ul>
-                <li><strong>Watch Together</strong> — Synchronized YouTube watching in voice channels.</li>
-                <li><strong>Soundboard</strong> — Upload and play short clips in voice.</li>
-                <li><strong>Voice Changer</strong> — 6 real-time audio presets (Deep, Robot, etc).</li>
-                <li><strong>Profile Banners</strong> — Customize your presence with static or GIF banners.</li>
-              </ul>
-            </div>
-
-            <div id="quick-start" class="docs-block reveal">
-              <h2>Quick Start (Development)</h2>
-              <p>Clone the repository and get started locally:</p>
-              <pre><code>git clone https://github.com/sellserv/voice-server.git
-cd voice-server
-
-# Install dependencies
-npm install
-
-# Copy and configure environment
-cp .env.example .env
-
-# Generate a secure JWT secret
-sed -i "s/change-me-to-a-random-string/$(openssl rand -hex 32)/" .env
-
-# Run dev mode (server + client with hot reload)
-npm run dev</code></pre>
-              <p class="text-secondary" style="margin-top: 12px;">Open <code>http://localhost:5173</code> to access the app. See <a href="#admin-setup">Admin Setup</a> to configure your admin account.</p>
-            </div>
-
-            <div id="setup-script" class="docs-block reveal">
-              <h2>Setup Script (Production)</h2>
-              <p>The setup script (<code>deploy/setup.sh</code>) configures a fresh server with everything you need:</p>
-              <ul>
-                <li>System updates + 1GB swap + automatic security updates</li>
-                <li>Node.js 22 via NodeSource</li>
-                <li>Build tools for native module compilation</li>
-                <li>nginx as a reverse proxy with Cloudflare IP allowlist, security headers, TLS hardening, and rate limiting</li>
-                <li>UFW firewall (SSH, HTTP, HTTPS, WebRTC UDP ports)</li>
-                <li>SSH hardening (password auth disabled, root login restricted to key-only)</li>
-                <li>fail2ban for brute-force protection</li>
-                <li>Dedicated <code>voip-server</code> system user</li>
-                <li><code>.env</code> with auto-generated JWT secret</li>
-                <li>SSL certificate directory with restricted permissions</li>
-                <li>systemd service with full sandboxing (syscall filters, capability restrictions, resource limits)</li>
-              </ul>
-              <h3>Running the Script</h3>
-              <pre><code># Clone to your server
-git clone https://github.com/sellserv/voice-server.git /opt/voip-server
-cd /opt/voip-server
-
-# IMPORTANT: Edit DOMAIN at the top of the script first
-nano deploy/setup.sh
-
-# Run the setup script
-sudo bash deploy/setup.sh
-
-# Edit your config
-nano .env
+# Edit the environment variables
+nano docker-compose.yml
+# Set JWT_SECRET (run: openssl rand -hex 32)
 # Set MEDIASOUP_ANNOUNCED_IP to your server's public IP
-# Set CORS_ORIGINS to https://your-domain.com
 
-# Install, build, and start
-npm ci --omit=dev
-npm run build
-sudo systemctl start voip-server</code></pre>
-            </div>
+# Start the server
+docker compose up -d</code></pre>
+            <p class="text-secondary" style="margin-top: 8px;">Your instance will be available at <code>http://your-server-ip:3000</code></p>
 
-            <div id="environment" class="docs-block reveal">
-              <h2>Environment Configuration</h2>
-              <p>After running the setup script, your <code>.env</code> file is at <code>/opt/voip-server/.env</code>. The script auto-generates a JWT secret. You still need to configure:</p>
-              <h3>Required</h3>
-              <pre><code># Set to your server's public IP — required for WebRTC voice
-MEDIASOUP_ANNOUNCED_IP=203.0.113.50
+            <h3>Updating</h3>
+            <pre><code>docker compose pull
+docker compose up -d</code></pre>
+            <p class="text-secondary" style="margin-top: 8px;">Data and uploads persist across updates via Docker volumes.</p>
 
-# Set to your domain
-CORS_ORIGINS=https://your-domain.com</code></pre>
-              <h3>Recommended</h3>
-              <pre><code># Email (required for login — MFA codes are sent via email)
-RESEND_API_KEY=re_xxxxxxxxxxxx
-EMAIL_FROM=noreply@your-domain.com
+            <h3>Environment Variables</h3>
+            <table class="docs-table">
+              <thead><tr><th>Variable</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td><code>JWT_SECRET</code></td><td>Yes</td><td>Run <code>openssl rand -hex 32</code></td></tr>
+                <tr><td><code>MEDIASOUP_ANNOUNCED_IP</code></td><td>Yes</td><td>Your server's public IP for WebRTC</td></tr>
+                <tr><td><code>CORS_ORIGINS</code></td><td>Recommended</td><td>Your domain (e.g. <code>https://chat.example.com</code>)</td></tr>
+                <tr><td><code>ADMIN_USERS</code></td><td>Recommended</td><td>Comma-separated admin usernames</td></tr>
+                <tr><td><code>RESEND_API_KEY</code></td><td>Recommended</td><td>For email MFA and verification</td></tr>
+                <tr><td><code>EMAIL_FROM</code></td><td>Recommended</td><td>Sender address (e.g. <code>noreply@example.com</code>)</td></tr>
+                <tr><td><code>GIPHY_API_KEY</code></td><td>Optional</td><td>Enables GIF picker</td></tr>
+                <tr><td><code>TURNSTILE_SITE_KEY</code></td><td>Optional</td><td>Cloudflare CAPTCHA on registration</td></tr>
+                <tr><td><code>TURNSTILE_SECRET_KEY</code></td><td>Optional</td><td>Cloudflare CAPTCHA secret</td></tr>
+              </tbody>
+            </table>
 
-# GIF picker
-GIPHY_API_KEY=your-giphy-api-key</code></pre>
-              <p class="text-secondary" style="margin-top: 12px;">After editing, restart the service: <code>sudo systemctl restart voip-server</code></p>
-            </div>
+            <h3>Admin Setup</h3>
+            <ol>
+              <li>Register an account on your instance</li>
+              <li>Verify your email</li>
+              <li>Add your username to <code>ADMIN_USERS</code> in the compose file</li>
+              <li>Restart: <code>docker compose up -d</code></li>
+            </ol>
 
-            <div id="admin-setup" class="docs-block reveal">
-              <h2>Admin Setup</h2>
-              <p>Instance admins are configured via the <code>ADMIN_USERS</code> environment variable — a comma-separated list of usernames with full platform control.</p>
-              <ol>
-                <li>Register an account at your server URL</li>
-                <li>Verify your email address</li>
-                <li>Add your username to <code>ADMIN_USERS</code> in <code>.env</code>:
-                  <pre><code>ADMIN_USERS=yourusername</code></pre>
-                </li>
-                <li>Restart the server:
-                  <pre><code>sudo systemctl restart voip-server</code></pre>
-                </li>
-                <li>Your account now has instance admin access — create invite codes from the admin panel to let others join</li>
-              </ol>
-              <p class="text-secondary" style="margin-top: 12px;">Multiple admins can be set with a comma-separated list: <code>ADMIN_USERS=admin1,admin2</code></p>
-            </div>
+            <h3>Firewall Ports</h3>
+            <table class="docs-table">
+              <thead><tr><th>Port</th><th>Protocol</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td>3000</td><td>TCP</td><td>Web UI and API</td></tr>
+                <tr><td>40000-40100</td><td>UDP</td><td>WebRTC media (voice/video)</td></tr>
+              </tbody>
+            </table>
 
-            <div id="email-setup" class="docs-block reveal">
-              <h2>Email Setup (Resend)</h2>
-              <p>Email is <strong>required in production</strong> for MFA login codes, email verification, password resets, and account lockout notifications. Without it, the server will refuse to start in production mode.</p>
-              <ol>
-                <li>Create an account at <a href="https://resend.com" target="_blank" rel="noopener">resend.com</a></li>
-                <li>Add and verify your domain under <strong>Domains</strong> (requires adding DNS records)</li>
-                <li>Create an API key under <strong>API Keys</strong></li>
-                <li>Add to your <code>.env</code>:
-                  <pre><code>RESEND_API_KEY=re_xxxxxxxxxxxx
-EMAIL_FROM=noreply@your-domain.com</code></pre>
-                </li>
-              </ol>
-              <p class="text-secondary" style="margin-top: 12px;">The <code>EMAIL_FROM</code> address must use the domain you verified in Resend.</p>
-              <h3>Emails Sent by the Server</h3>
-              <table class="docs-table">
-                <thead><tr><th>Email</th><th>When</th><th>Code Expiry</th></tr></thead>
-                <tbody>
-                  <tr><td>Email verification</td><td>On registration and email change</td><td>10 minutes</td></tr>
-                  <tr><td>MFA login code</td><td>On every login (if using email MFA)</td><td>5 minutes</td></tr>
-                  <tr><td>Password reset code</td><td>On forgot password request</td><td>5 minutes</td></tr>
-                  <tr><td>Account locked</td><td>After 5 failed login attempts</td><td>10 minutes</td></tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div id="cloudflare" class="docs-block reveal">
-              <h2>Cloudflare Setup</h2>
-              <ol>
-                <li>Point your domain to your server's IP with <strong>Proxy ON</strong> (orange cloud)</li>
-                <li>Go to <strong>SSL/TLS &gt; Origin Server</strong> and create an Origin Certificate for your domain</li>
-                <li>Save the certificate to <code>/etc/ssl/voip-server/origin.pem</code></li>
-                <li>Save the private key to <code>/etc/ssl/voip-server/origin-key.pem</code></li>
-                <li>Set SSL/TLS mode to <strong>Full (strict)</strong></li>
-              </ol>
-            </div>
-
-            <div id="turnstile" class="docs-block reveal">
-              <h2>Cloudflare Turnstile (CAPTCHA)</h2>
-              <p>Turnstile adds CAPTCHA protection to the registration form, preventing automated bot signups. Optional — if not configured, registration works without CAPTCHA.</p>
-              <ol>
-                <li>Go to the <a href="https://dash.cloudflare.com/?to=/:account/turnstile" target="_blank" rel="noopener">Cloudflare Turnstile dashboard</a></li>
-                <li>Click <strong>Add site</strong> and enter your domain</li>
-                <li>Choose widget mode (<strong>Managed</strong> recommended)</li>
-                <li>Copy the <strong>Site Key</strong> and <strong>Secret Key</strong></li>
-                <li>Add both to your <code>.env</code>:
-                  <pre><code>TURNSTILE_SITE_KEY=0x4AAAAAAA...
-TURNSTILE_SECRET_KEY=0x4AAAAAAA...</code></pre>
-                </li>
-                <li>Restart the server: <code>sudo systemctl restart voip-server</code></li>
-              </ol>
-              <p class="text-secondary" style="margin-top: 12px;">Once configured, the registration page will show a Turnstile challenge automatically.</p>
-            </div>
-
-            <div id="auto-deploy" class="docs-block reveal">
-              <h2>Auto-Deploy (GitHub Actions)</h2>
-              <p>Pushes to <code>main</code> automatically deploy to your server via GitHub Actions. The workflow pulls latest code, installs dependencies, builds the client, restarts the service, and runs a health check.</p>
-              <h3>Setup</h3>
-              <ol>
-                <li>Create a deploy user on your server:
-                  <pre><code>sudo useradd -m -s /bin/bash deploy
-sudo usermod -aG voip-server deploy
-echo 'deploy ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart voip-server' \
-  | sudo tee /etc/sudoers.d/voip-server-deploy</code></pre>
-                </li>
-                <li>Generate an SSH key pair and copy the public key to your server:
-                  <pre><code>ssh-keygen -t ed25519 -f ~/.ssh/voip-server-deploy -N ""
-ssh-copy-id -i ~/.ssh/voip-server-deploy.pub deploy@your-server-ip</code></pre>
-                </li>
-                <li>Add these <strong>repository secrets</strong> in GitHub (Settings &gt; Secrets &gt; Actions):
-                  <table class="docs-table">
-                    <thead><tr><th>Secret</th><th>Value</th></tr></thead>
-                    <tbody>
-                      <tr><td><code>DEPLOY_HOST</code></td><td>Your server's IP address</td></tr>
-                      <tr><td><code>DEPLOY_USER</code></td><td><code>deploy</code></td></tr>
-                      <tr><td><code>DEPLOY_SSH_KEY</code></td><td>Contents of the private key file</td></tr>
-                    </tbody>
-                  </table>
-                </li>
-                <li>Ensure the repo is cloned at <code>/opt/voip-server</code> and the deploy user has read access.</li>
-              </ol>
-            </div>
-
-            <div id="giphy" class="docs-block reveal">
-              <h2>GIPHY API</h2>
-              <p>The GIF picker and GIF banner selection require a GIPHY API key.</p>
-              <ol>
-                <li>Go to <a href="https://developers.giphy.com" target="_blank" rel="noopener">developers.giphy.com</a> and create an app</li>
-                <li>Copy the API key</li>
-                <li>Add to your <code>.env</code>:
-                  <pre><code>GIPHY_API_KEY=your-api-key-here</code></pre>
-                </li>
-                <li>Restart the service: <code>sudo systemctl restart voip-server</code></li>
-              </ol>
-            </div>
+            <h3>Manual Deployment</h3>
+            <p>If you prefer not to use Docker, see the <a href="https://github.com/sellserv/voice-server" target="_blank" rel="noopener">GitHub repository</a> for manual setup instructions with the included <code>deploy/setup.sh</code> script (Ubuntu 24.04 / Debian 12+).</p>
           </div>
+
+          <!-- Tech & Requirements Card -->
+          <div class="glass-card docs-card reveal">
+            <div class="docs-card-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <h2>Before You Self-Host</h2>
+            <p class="docs-card-desc">Tech stack, system requirements, and what to know before deploying.</p>
+
+            <h3>Tech Stack</h3>
+            <table class="docs-table">
+              <thead><tr><th>Layer</th><th>Technology</th></tr></thead>
+              <tbody>
+                <tr><td>Runtime</td><td>Node.js 22</td></tr>
+                <tr><td>HTTP Server</td><td>Fastify 5</td></tr>
+                <tr><td>Frontend</td><td>SvelteKit + Svelte 5</td></tr>
+                <tr><td>Database</td><td>SQLite (better-sqlite3 + FTS5)</td></tr>
+                <tr><td>Voice/Video</td><td>mediasoup 3.15 (WebRTC SFU)</td></tr>
+                <tr><td>Auth</td><td>bcrypt + JWT + TOTP</td></tr>
+              </tbody>
+            </table>
+
+            <h3>System Requirements</h3>
+            <table class="docs-table">
+              <thead><tr><th>Spec</th><th>Minimum</th><th>Recommended</th></tr></thead>
+              <tbody>
+                <tr><td>Architecture</td><td colspan="2">x86_64 (amd64) required</td></tr>
+                <tr><td>OS</td><td colspan="2">Any Linux with Docker, or Ubuntu 24.04 / Debian 12+</td></tr>
+                <tr><td>RAM</td><td>1 GB</td><td>2 GB+</td></tr>
+                <tr><td>CPU</td><td>1 vCPU</td><td>2 vCPU+</td></tr>
+                <tr><td>Storage</td><td>10 GB</td><td>20 GB+ (depends on uploads)</td></tr>
+              </tbody>
+            </table>
+
+            <h3>Resource Usage</h3>
+            <p>Designed for a 1 GB server serving 10-15 concurrent users:</p>
+            <table class="docs-table">
+              <thead><tr><th>Component</th><th>Memory</th></tr></thead>
+              <tbody>
+                <tr><td>Node.js</td><td>~100 MB</td></tr>
+                <tr><td>mediasoup worker</td><td>~40 MB</td></tr>
+                <tr><td>SQLite</td><td>~10 MB</td></tr>
+                <tr><td><strong>Total</strong></td><td><strong>~150-200 MB</strong></td></tr>
+              </tbody>
+            </table>
+
+            <h3>Good to Know</h3>
+            <ul>
+              <li><strong>SQLite</strong> — No separate database server needed. Data is a single file. Works great for small-medium instances.</li>
+              <li><strong>WebRTC (mediasoup)</strong> — Requires UDP ports 40000-40100 open. Voice won't work behind restrictive firewalls that block UDP.</li>
+              <li><strong>Email</strong> — Strongly recommended. Without it, users can't receive MFA codes or reset passwords. <a href="https://resend.com" target="_blank" rel="noopener">Resend</a> has a generous free tier.</li>
+              <li><strong>Reverse Proxy</strong> — For production, put nginx or Caddy in front for SSL termination. The Docker image only serves HTTP on port 3000.</li>
+              <li><strong>All features are free</strong> — Self-hosted instances have full access to every feature. The Pro tier only applies to the official instance.</li>
+              <li><strong>Updates</strong> — Database migrations run automatically on startup. Just pull the new image and restart.</li>
+              <li><strong>Backups</strong> — Back up the <code>data/</code> and <code>uploads/</code> volumes. That's your entire instance.</li>
+            </ul>
+
+            <h3>Voice Configuration</h3>
+            <table class="docs-table">
+              <thead><tr><th>Setting</th><th>Value</th></tr></thead>
+              <tbody>
+                <tr><td>Audio codec</td><td>Opus, 48kHz, stereo, FEC enabled</td></tr>
+                <tr><td>Bitrate</td><td>128 kbps</td></tr>
+                <tr><td>Video codecs</td><td>VP8, VP9</td></tr>
+                <tr><td>Noise suppression</td><td>RNNoise (WebAssembly, client-side)</td></tr>
+              </tbody>
+            </table>
+          </div>
+
         </div>
       </div>
     </section>

@@ -134,6 +134,18 @@ sudo systemctl start voip-server</code></pre>
             <li>Add to <code>.env</code> and restart</li>
           </ol>
 
+          <h2>Mobile Push Notifications (Optional)</h2>
+          <p>Required for sending push notifications to the Android mobile app. Without this, the app works normally but won't receive background notifications.</p>
+          <ol>
+            <li>Create a project at <a href="https://console.firebase.google.com" target="_blank" rel="noopener">Firebase Console</a></li>
+            <li>Go to <strong>Project Settings &gt; Service Accounts</strong></li>
+            <li>Select <strong>Node.js</strong> and click <strong>Generate new private key</strong></li>
+            <li>Add the full JSON string to <code>.env</code>:
+              <pre><code>FIREBASE_SERVICE_ACCOUNT='{"type":"service_account","project_id":"...","private_key":"...","client_email":"..."}'</code></pre>
+            </li>
+            <li>Restart the service</li>
+          </ol>
+
           <h2>CAPTCHA (Optional)</h2>
           <p>Add Cloudflare Turnstile to prevent automated signups:</p>
           <ol>

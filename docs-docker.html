@@ -57,12 +57,15 @@
             <li>UDP ports 40000-40100 open in your firewall</li>
           </ul>
 
-          <h3>1. Download the Compose File</h3>
-          <pre><code>curl -O https://raw.githubusercontent.com/sellserv/voice-server/main/docker-compose.yml</code></pre>
+          <h3>1. Download the Deploy Files</h3>
+          <pre><code>mkdir sellserv && cd sellserv
+curl -O https://raw.githubusercontent.com/sellserv/voice-server/main/deploy/self-hosted/docker-compose.yml
+curl -O https://raw.githubusercontent.com/sellserv/voice-server/main/deploy/self-hosted/.env.example
+cp .env.example .env</code></pre>
 
           <h3>2. Configure Environment</h3>
-          <p>Open the file and set the required variables:</p>
-          <pre><code>nano docker-compose.yml</code></pre>
+          <p>Edit the <code>.env</code> file and set the required variables:</p>
+          <pre><code>nano .env</code></pre>
           <p><strong>Required:</strong></p>
           <ul>
             <li><code>JWT_SECRET</code> — Generate with <code>openssl rand -hex 32</code></li>
@@ -71,7 +74,7 @@
           <p style="margin-top: 12px;"><strong>Recommended:</strong></p>
           <ul>
             <li><code>CORS_ORIGINS</code> — Your domain (e.g. <code>https://chat.example.com</code>)</li>
-            <li><code>ADMIN_USERS</code> — Your username for instance admin access</li>
+            <li><code>ADMIN_USERS</code> — Your user ID for instance admin access</li>
             <li><code>RESEND_API_KEY</code> + <code>EMAIL_FROM</code> — For email MFA and verification</li>
           </ul>
 

@@ -85,7 +85,8 @@
             <h2>Before You Self-Host</h2>
             <p class="docs-card-desc">Tech stack, system requirements, and what to know before deploying.</p>
 
-            <h3>Tech Stack</h3>
+            <h3>Tech Stack — Self-Hosted</h3>
+            <p>Single container, zero external dependencies.</p>
             <table class="docs-table">
               <thead><tr><th>Layer</th><th>Technology</th></tr></thead>
               <tbody>
@@ -94,7 +95,20 @@
                 <tr><td>Frontend</td><td>SvelteKit + Svelte 5</td></tr>
                 <tr><td>Database</td><td>SQLite (better-sqlite3 + FTS5)</td></tr>
                 <tr><td>Voice/Video</td><td>mediasoup 3.15 (WebRTC SFU)</td></tr>
+                <tr><td>File Storage</td><td>Local disk</td></tr>
                 <tr><td>Auth</td><td>bcrypt + JWT + TOTP</td></tr>
+              </tbody>
+            </table>
+
+            <h3>Tech Stack — Production</h3>
+            <p>Same codebase, activated via env vars for scaling to thousands of users.</p>
+            <table class="docs-table">
+              <thead><tr><th>Layer</th><th>Technology</th></tr></thead>
+              <tbody>
+                <tr><td>Database</td><td>PostgreSQL 17 with connection pooling</td></tr>
+                <tr><td>Cache / Pub/Sub</td><td>Valkey (Redis-compatible)</td></tr>
+                <tr><td>Voice/Video</td><td>LiveKit (WebRTC SFU) with E2EE</td></tr>
+                <tr><td>File Storage</td><td>S3-compatible (Cloudflare R2) with CDN</td></tr>
               </tbody>
             </table>
 
@@ -124,10 +138,10 @@
 
             <h3>Good to Know</h3>
             <ul>
-              <li><strong>SQLite</strong> — No separate database server needed. Data is a single file.</li>
+              <li><strong>Zero config by default</strong> — Self-hosted mode uses SQLite, mediasoup, and local storage. No external services needed.</li>
+              <li><strong>Scalable when you need it</strong> — Set env vars to switch to PostgreSQL, Redis, LiveKit, and S3 for production scale.</li>
               <li><strong>WebRTC</strong> — Requires UDP ports 40000-40100 open for voice/video.</li>
               <li><strong>Email</strong> — Strongly recommended for MFA and password resets. <a href="https://resend.com" target="_blank" rel="noopener">Resend</a> has a free tier.</li>
-              <li><strong>Reverse Proxy</strong> — For production, use nginx or Caddy for SSL.</li>
               <li><strong>All features are free</strong> — Self-hosted instances have full access to everything.</li>
               <li><strong>Updates</strong> — DB migrations run automatically on startup.</li>
               <li><strong>Backups</strong> — Back up <code>data/</code> and <code>uploads/</code>. That's your entire instance.</li>

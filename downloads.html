@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Downloads — SellServ Voice</title>
   <meta name="description" content="Download SellServ Voice for Windows, Linux, or macOS.">
+  <meta property="og:image" content="https://info.sellserv.net/assets/screenshot.png">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -153,7 +154,11 @@
         setLink('download-mac-arm', asset('.dmg'));
       })
       .catch(() => {
-        document.getElementById('latest-version').textContent = 'Could not fetch latest version.';
+        document.getElementById('latest-version').innerHTML = 'Could not load release info. <a href="https://github.com/sellserv/voice-server/releases" target="_blank" rel="noopener">View all releases on GitHub</a>.';
+        ['download-windows', 'download-linux-deb', 'download-linux-pacman', 'download-linux-appimage', 'download-mac-arm'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.display = 'none';
+        });
       });
   </script>
 </body>

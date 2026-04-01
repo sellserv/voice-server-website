@@ -58,42 +58,45 @@
             <li>A domain name pointed to your server</li>
           </ul>
 
+          <h2>What's Included</h2>
+          <p>The Docker Compose setup includes everything you need:</p>
+          <ul>
+            <li><strong>Caddy</strong> — Reverse proxy with automatic HTTPS (Let's Encrypt) or Cloudflare origin certs</li>
+            <li><strong>Docker</strong> — Application container with all dependencies built in</li>
+            <li><strong>SQLite</strong> — Zero-config database (or PostgreSQL via env var)</li>
+            <li><strong>mediasoup</strong> — WebRTC voice/video SFU</li>
+          </ul>
+
           <h2>What the Setup Script Does</h2>
           <p>The included <code>deploy/setup.sh</code> configures a fresh server with:</p>
           <ul>
             <li>System updates + 1GB swap + automatic security updates</li>
-            <li>Node.js 22 via NodeSource</li>
-            <li>Build tools for native module compilation (mediasoup)</li>
-            <li>nginx reverse proxy with security headers, TLS hardening, and rate limiting</li>
+            <li>Docker and Docker Compose</li>
             <li>UFW firewall (SSH, HTTP, HTTPS, WebRTC UDP ports)</li>
             <li>SSH hardening (password auth disabled, key-only root login)</li>
             <li>fail2ban for brute-force protection</li>
-            <li>Dedicated <code>voip-server</code> system user</li>
-            <li><code>.env</code> with auto-generated JWT secret</li>
-            <li>systemd service with full sandboxing</li>
           </ul>
 
           <h2>Installation</h2>
 
-          <h3>1. Clone the Repository</h3>
+          <h3>1. Run the Setup Script</h3>
+          <p>On a fresh server, this installs Docker and configures the UFW firewall:</p>
+          <pre><code>curl -fsSL https://raw.githubusercontent.com/sellserv/voice-server/main/deploy/setup.sh | sudo bash</code></pre>
+
+          <h3>2. Clone and Configure</h3>
           <pre><code>git clone https://github.com/sellserv/voice-server.git /opt/voip-server
-cd /opt/voip-server</code></pre>
-
-          <h3>2. Edit and Run the Setup Script</h3>
-          <pre><code># Set your domain at the top of the script
-nano deploy/setup.sh
-
-# Run the script
-sudo bash deploy/setup.sh</code></pre>
-
-          <h3>3. Configure Environment</h3>
-          <pre><code>nano .env</code></pre>
+cd /opt/voip-server/deploy/self-hosted
+cp .env.example .env
+nano .env</code></pre>
           <p><strong>Required:</strong></p>
-          <pre><code># Your server's public IP — required for WebRTC voice
+          <pre><code># Secret key for authentication tokens
+JWT_SECRET=your-generated-secret
+
+# Your server's public IP — required for WebRTC voice
 MEDIASOUP_ANNOUNCED_IP=203.0.113.50
 
-# Your domain
-CORS_ORIGINS=https://your-domain.com</code></pre>
+# Your domain — used by Caddy for automatic HTTPS
+DOMAIN=your-domain.com</code></pre>
           <p style="margin-top: 12px;"><strong>Recommended:</strong></p>
           <pre><code># Email (required for MFA login codes)
 RESEND_API_KEY=re_xxxxxxxxxxxx
@@ -102,10 +105,15 @@ EMAIL_FROM=noreply@your-domain.com
 # GIF picker
 GIPHY_API_KEY=your-giphy-api-key</code></pre>
 
-          <h3>4. Install, Build, and Start</h3>
-          <pre><code>npm ci --omit=dev
-npm run build
-sudo systemctl start voip-server</code></pre>
+          <h3>3. SSL Certificates</h3>
+          <p><strong>Option A — Let's Encrypt (automatic):</strong> Set <code>DOMAIN</code> in <code>.env</code> and Caddy handles certificates automatically.</p>
+          <p><strong>Option B — Cloudflare Origin Certs:</strong> Place your certificates and Caddy will use them:</p>
+          <pre><code># Save cert and key to the certs directory
+mkdir -p certs
+# Place origin.pem and origin-key.pem in certs/</code></pre>
+
+          <h3>4. Start the Server</h3>
+          <pre><code>docker compose up -d</code></pre>
 
           <h2>Admin Setup</h2>
           <ol>
@@ -114,15 +122,15 @@ sudo systemctl start voip-server</code></pre>
             <li>Add your username to <code>ADMIN_USERS</code> in <code>.env</code>:
               <pre><code>ADMIN_USERS=yourusername</code></pre>
             </li>
-            <li>Restart: <code>sudo systemctl restart voip-server</code></li>
+            <li>Restart: <code>docker compose up -d</code></li>
           </ol>
 
           <h2>SSL Setup (Cloudflare)</h2>
+          <p>If using Cloudflare as your DNS proxy, use Origin Certificates instead of Let's Encrypt:</p>
           <ol>
             <li>Point your domain to your server's IP with <strong>Proxy ON</strong> (orange cloud)</li>
             <li>Go to <strong>SSL/TLS &gt; Origin Server</strong> and create an Origin Certificate</li>
-            <li>Save the certificate to <code>/etc/ssl/voip-server/origin.pem</code></li>
-            <li>Save the private key to <code>/etc/ssl/voip-server/origin-key.pem</code></li>
+            <li>Save the certificate and key to the <code>certs/</code> directory in your deploy folder</li>
             <li>Set SSL/TLS mode to <strong>Full (strict)</strong></li>
           </ol>
 
@@ -164,9 +172,7 @@ TURNSTILE_SECRET_KEY=0x4AAAAAAA...</code></pre>
           <ol>
             <li>Create a deploy user:
               <pre><code>sudo useradd -m -s /bin/bash deploy
-sudo usermod -aG voip-server deploy
-echo 'deploy ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart voip-server' \
-  | sudo tee /etc/sudoers.d/voip-server-deploy</code></pre>
+sudo usermod -aG docker deploy</code></pre>
             </li>
             <li>Generate and copy an SSH key:
               <pre><code>ssh-keygen -t ed25519 -f ~/.ssh/voip-deploy -N ""
@@ -185,20 +191,20 @@ ssh-copy-id -i ~/.ssh/voip-deploy.pub deploy@your-server-ip</code></pre>
           </ol>
 
           <h2>Updating</h2>
-          <pre><code>cd /opt/voip-server
-git pull origin main
-npm ci --omit=dev
-npm run build
-sudo systemctl restart voip-server</code></pre>
+          <pre><code>cd /opt/voip-server/deploy/self-hosted
+docker compose pull
+docker compose up -d</code></pre>
+          <p>Data and uploads persist across updates via Docker volumes. Database migrations run automatically on startup.</p>
 
           <h2>Firewall Ports</h2>
           <table class="docs-table">
             <thead><tr><th>Port</th><th>Protocol</th><th>Purpose</th></tr></thead>
             <tbody>
               <tr><td>22</td><td>TCP</td><td>SSH</td></tr>
-              <tr><td>80</td><td>TCP</td><td>HTTP (redirect to HTTPS)</td></tr>
-              <tr><td>443</td><td>TCP</td><td>HTTPS</td></tr>
-              <tr><td>40000-40100</td><td>UDP</td><td>WebRTC media (voice/video)</td></tr>
+              <tr><td>80 / 443</td><td>TCP</td><td>Caddy — HTTP / HTTPS</td></tr>
+              <tr><td>40000-40100</td><td>UDP</td><td>mediasoup RTP (self-hosted only)</td></tr>
+              <tr><td>50000-50100</td><td>UDP</td><td>LiveKit (production only)</td></tr>
+              <tr><td>7881</td><td>TCP</td><td>LiveKit (production only)</td></tr>
             </tbody>
           </table>
 

@@ -103,8 +103,8 @@ docker compose up -d</code></pre>
               <tr><td><code>MEDIASOUP_ANNOUNCED_IP</code></td><td>Yes</td><td>Server's public IP for WebRTC voice</td></tr>
               <tr><td><code>CORS_ORIGINS</code></td><td>Recommended</td><td>Your domain (e.g. <code>https://chat.example.com</code>)</td></tr>
               <tr><td><code>ADMIN_USERS</code></td><td>Recommended</td><td>Comma-separated admin user IDs (set in <code>.env</code>)</td></tr>
-              <tr><td><code>RESEND_API_KEY</code></td><td>Recommended</td><td>For email MFA and verification</td></tr>
-              <tr><td><code>EMAIL_FROM</code></td><td>Recommended</td><td>Sender address (e.g. <code>noreply@example.com</code>)</td></tr>
+              <tr><td><code>RESEND_API_KEY</code></td><td>Yes</td><td>For email verification, MFA, and password resets</td></tr>
+              <tr><td><code>EMAIL_FROM</code></td><td>Yes</td><td>Sender address (e.g. <code>noreply@example.com</code>)</td></tr>
               <tr><td><code>VOICE_TYPE</code></td><td>Optional</td><td><code>mediasoup</code> (default) or <code>livekit</code></td></tr>
               <tr><td><code>DB_TYPE</code></td><td>Optional</td><td><code>sqlite</code> (default) or <code>postgres</code></td></tr>
               <tr><td><code>STORAGE_TYPE</code></td><td>Optional</td><td><code>local</code> (default) or <code>s3</code></td></tr>

@@ -101,18 +101,6 @@
               </tbody>
             </table>
 
-            <h3>Tech Stack — Production</h3>
-            <p>Same codebase, activated via env vars for scaling to thousands of users.</p>
-            <table class="docs-table">
-              <thead><tr><th>Layer</th><th>Technology</th></tr></thead>
-              <tbody>
-                <tr><td>Database</td><td>PostgreSQL 17 with connection pooling</td></tr>
-                <tr><td>Cache / Pub/Sub</td><td>Valkey (Redis-compatible)</td></tr>
-                <tr><td>Voice/Video</td><td>LiveKit (WebRTC SFU) with E2EE</td></tr>
-                <tr><td>File Storage</td><td>S3-compatible (Cloudflare R2) with CDN</td></tr>
-              </tbody>
-            </table>
-
             <h3>System Requirements</h3>
             <table class="docs-table">
               <thead><tr><th>Spec</th><th>Minimum</th><th>Recommended</th></tr></thead>
@@ -140,7 +128,6 @@
             <h3>Good to Know</h3>
             <ul>
               <li><strong>Zero config by default</strong> — Self-hosted mode uses SQLite, mediasoup, and local storage. No external services needed.</li>
-              <li><strong>Scalable when you need it</strong> — Set env vars to switch to PostgreSQL, Redis, LiveKit, and S3 for production scale.</li>
               <li><strong>WebRTC</strong> — Requires UDP ports 40000-40100 open for voice/video.</li>
               <li><strong>Email</strong> — Required for email verification, MFA, and password resets. <a href="https://resend.com" target="_blank" rel="noopener">Resend</a> has a free tier.</li>
               <li><strong>All features are free</strong> — Self-hosted instances have full access to everything.</li>

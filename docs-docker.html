@@ -101,18 +101,46 @@ docker compose up -d</code></pre>
               <tr><td><code>JWT_SECRET</code></td><td>Yes</td><td>Run <code>openssl rand -hex 32</code></td></tr>
               <tr><td><code>DOMAIN</code></td><td>Yes</td><td>Your domain (for Caddy / Let's Encrypt)</td></tr>
               <tr><td><code>MEDIASOUP_ANNOUNCED_IP</code></td><td>Yes</td><td>Server's public IP for WebRTC voice</td></tr>
-              <tr><td><code>CORS_ORIGINS</code></td><td>Recommended</td><td>Your domain (e.g. <code>https://chat.example.com</code>)</td></tr>
-              <tr><td><code>ADMIN_USERS</code></td><td>Recommended</td><td>Comma-separated admin user IDs (set in <code>.env</code>)</td></tr>
-              <tr><td><code>RESEND_API_KEY</code></td><td>Yes</td><td>For email verification, MFA, and password resets</td></tr>
+              <tr><td><code>CORS_ORIGINS</code></td><td>Yes</td><td>Your domain (e.g. <code>https://chat.example.com</code>)</td></tr>
+              <tr><td><code>RESEND_API_KEY</code></td><td>Yes</td><td>For email verification, MFA, and password resets (<a href="https://resend.com" target="_blank" rel="noopener">resend.com</a>)</td></tr>
               <tr><td><code>EMAIL_FROM</code></td><td>Yes</td><td>Sender address (e.g. <code>noreply@example.com</code>)</td></tr>
+              <tr><td><code>ADMIN_USERS</code></td><td>Recommended</td><td>Comma-separated admin user IDs (set in <code>.env</code>)</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Adapter Variables</h3>
+          <p>Switch adapters by setting the type variable. When enabled, the associated config vars become required.</p>
+          <table class="docs-table">
+            <thead><tr><th>Variable</th><th>Required</th><th>Description</th></tr></thead>
+            <tbody>
               <tr><td><code>VOICE_TYPE</code></td><td>Optional</td><td><code>mediasoup</code> (default) or <code>livekit</code></td></tr>
+              <tr><td><code>LIVEKIT_URL</code></td><td>If LiveKit</td><td>Internal LiveKit server URL (e.g. <code>http://livekit:7880</code>)</td></tr>
+              <tr><td><code>LIVEKIT_API_KEY</code></td><td>If LiveKit</td><td>Must match <code>livekit.yaml</code> keys section</td></tr>
+              <tr><td><code>LIVEKIT_API_SECRET</code></td><td>If LiveKit</td><td>Must match <code>livekit.yaml</code> keys section</td></tr>
+              <tr><td><code>LIVEKIT_PUBLIC_URL</code></td><td>If LiveKit</td><td>Public WebSocket URL for clients (e.g. <code>wss://livekit.example.com</code>)</td></tr>
               <tr><td><code>DB_TYPE</code></td><td>Optional</td><td><code>sqlite</code> (default) or <code>postgres</code></td></tr>
+              <tr><td><code>DATABASE_URL</code></td><td>If PostgreSQL</td><td>Connection string (e.g. <code>postgres://user:pass@host:5432/db</code>)</td></tr>
               <tr><td><code>STORAGE_TYPE</code></td><td>Optional</td><td><code>local</code> (default) or <code>s3</code></td></tr>
-              <tr><td><code>REDIS_URL</code></td><td>Optional</td><td>Redis/Valkey URL for pub/sub and state</td></tr>
-              <tr><td><code>GIPHY_API_KEY</code></td><td>Optional</td><td>Enables GIF picker</td></tr>
-              <tr><td><code>TURNSTILE_SITE_KEY</code></td><td>Optional</td><td>Cloudflare CAPTCHA on registration</td></tr>
-              <tr><td><code>TURNSTILE_SECRET_KEY</code></td><td>Optional</td><td>Cloudflare CAPTCHA secret</td></tr>
-              <tr><td><code>FIREBASE_SERVICE_ACCOUNT</code></td><td>Optional</td><td>Firebase Admin SDK JSON string for mobile push notifications</td></tr>
+              <tr><td><code>S3_ENDPOINT</code></td><td>If S3</td><td>S3-compatible endpoint URL</td></tr>
+              <tr><td><code>S3_BUCKET</code></td><td>If S3</td><td>Bucket name</td></tr>
+              <tr><td><code>S3_ACCESS_KEY</code></td><td>If S3</td><td>Access key</td></tr>
+              <tr><td><code>S3_SECRET_KEY</code></td><td>If S3</td><td>Secret key</td></tr>
+              <tr><td><code>S3_PUBLIC_URL</code></td><td>If S3</td><td>Public CDN URL for uploaded files</td></tr>
+              <tr><td><code>REDIS_URL</code></td><td>Optional</td><td>Redis/Valkey URL for pub/sub and state caching</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Optional Features</h3>
+          <table class="docs-table">
+            <thead><tr><th>Variable</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><code>GIPHY_API_KEY</code></td><td>Enables GIF picker</td></tr>
+              <tr><td><code>TURNSTILE_SITE_KEY</code> + <code>TURNSTILE_SECRET_KEY</code></td><td>Cloudflare CAPTCHA on registration</td></tr>
+              <tr><td><code>FIREBASE_SERVICE_ACCOUNT</code></td><td>Firebase Admin SDK JSON for mobile push notifications</td></tr>
+              <tr><td><code>STRIPE_SECRET_KEY</code> + <code>STRIPE_WEBHOOK_SECRET</code></td><td>Stripe billing (pro subscriptions)</td></tr>
+              <tr><td><code>STRIPE_PRO_PRICE_ID</code> + <code>STRIPE_PORTAL_RETURN_URL</code></td><td>Stripe price ID and return URL</td></tr>
+              <tr><td><code>OAUTH2_CLIENT_ID</code> + <code>OAUTH2_CLIENT_SECRET</code></td><td>Standalone admin console OAuth2 credentials</td></tr>
+              <tr><td><code>SESSION_SECRET</code></td><td>Admin console session encryption key</td></tr>
             </tbody>
           </table>
 
